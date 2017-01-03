@@ -1,0 +1,12 @@
+[colors]
+    background = rgba(25, 25, 25, 0.5)
+[options]
+	# Cursors
+	# Blink
+	cursor_blink=system
+	# block, underline, pipe
+	cursor_shape=underline
+	
+	# Fonts
+	font = Terminus 11
+	font = DejaVuSansMono 11

@@ -1,0 +1,11 @@
+2016/12/30-03:44:01.437 1200 Reusing MANIFEST /home/spencer/.config/chromium/Default/Session Storage/MANIFEST-000001
+2016/12/30-03:44:01.437 1200 Recovering log #4
+2016/12/30-03:44:01.438 1200 Level-0 table #7: started
+2016/12/30-03:44:01.447 1200 Level-0 table #7: 28383 bytes OK
+2016/12/30-03:44:01.447 1200 Recovering log #7
+2016/12/30-03:44:01.447 1200 Reusing old log /home/spencer/.config/chromium/Default/Session Storage/000007.log 
+2016/12/30-03:44:01.448 1200 Delete type=0 #4
+2016/12/30-03:44:01.448 1200 Delete type=2 #8
+2016/12/30-03:44:37.148 1554 Level-0 table #9: started
+2016/12/30-03:44:37.155 1554 Level-0 table #9: 303906 bytes OK
+2016/12/30-03:44:37.156 1554 Delete type=0 #7

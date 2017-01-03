@@ -1,0 +1,19 @@
+VirtualBox GUI VM Selector Window 5.1.12 r112440 linux.amd64 (Dec 21 2016 12:52:39) release log
+00:00:00.262642 Log opened 2016-12-30T02:29:14.726318000Z
+00:00:00.262642 Build Type: release
+00:00:00.262644 OS Product: Linux
+00:00:00.262644 OS Release: 4.8.13-1-ARCH
+00:00:00.262644 OS Version: #1 SMP PREEMPT Fri Dec 9 07:24:34 CET 2016
+00:00:00.262656 DMI Product Name: VirtualBox
+00:00:00.262659 DMI Product Version: 1.2
+00:00:00.262695 Host RAM: 3956MB (3.8GB) total, 3802MB (3.7GB) available
+00:00:00.262698 Executable: /usr/lib/virtualbox/VirtualBox
+00:00:00.262698 Process ID: 9405
+00:00:00.262698 Package type: LINUX_64BITS_GENERIC (OSE)
+00:00:00.262712 Qt version: 5.7.1
+00:00:00.276051 GUI: UIMediumEnumerator: Medium-enumeration started...
+00:00:00.343265 Failed to open "/dev/vboxdrv", errno=13, rc=VERR_VM_DRIVER_NOT_ACCESSIBLE
+00:00:00.343334 GUI: UIMediumEnumerator: Medium-enumeration finished!
+00:00:00.344025 GUI: UIDesktopWidgetWatchdog::sltHandleHostScreenAvailableGeometryCalculated: Screen 0 work area is actually resized to: 0x18 x 636x441
+00:00:00.366345 refreshCertificates/#1: InMem.Cert.TbsCertificate.T3.Extensions.papItems[#].ExtnValue.NameConstraints.T0.PermittedSubtrees.papItems[#]: Unexpected sequence type/flags: 0x2/0x80 (expected 0x10/0x20)
+00:00:00.367309 refreshCertificates/#3: Found 1/166 SSL certs we/you trust (previously 0/0).

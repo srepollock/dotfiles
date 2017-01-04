@@ -1,9 +1,9 @@
 [colors]
-background = #222
-foreground = #eee
-linecolor = #f66
-bordercolor = #333
-accent = #e60053
+background = #88222222
+foreground = #88eeeeee
+linecolor = #88ff6666
+bordercolor = #88333333
+accent = #ee60053
 
 
 [settings]

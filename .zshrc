@@ -8,7 +8,7 @@ alias hy='history'
 alias py='python'
 
 #Prompt
-PROMPT='%F{yellow}%n%f@%F{magenta}%m%f in %F{green}%~%f%F{cyan} > %f'
+PROMPT='%F{cyan}%n%f @ %m %F{cyan}%~ > %f'
 RPROMPT=''
 screenfetch
 # Git Good Update Export

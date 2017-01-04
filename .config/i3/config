@@ -89,7 +89,7 @@ bindsym $mod+Shift+space floating toggle
 # bindsym $mod+space focus mode_toggle
 
 # Rofi
-bindsym $mod+space exec rofi -show run 
+bindsym $mod+space exec rofi -show run -lines 3 -width 100 -fullscreen -padding 300
 #-font "DejaVu 18"
 
 # focus the parent container

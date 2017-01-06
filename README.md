@@ -19,5 +19,5 @@ The dotfiles for my Linux system builds
 - vim
 
 ## Background image RAW
-![bg](https://github.com/srepollock/dotfiles/blob/develop/blue-material.png?raw=true "OptionalText")    
+![bg](https://github.com/srepollock/dotfiles/blob/develop/pixel_waterfall.png?raw=true "OptionalText")    
 [Source](https://www.imgur.com/gallery/SELjK)

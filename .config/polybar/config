@@ -1,14 +1,12 @@
 [colors]
-background = #88222222
-foreground = #88eeeeee
+background = #00000000
+foreground = #ffffffff
 linecolor = #88ff6666
 bordercolor = #88333333
-accent = #ee60053
-
+accent = #ee666
 
 [settings]
 screenchange-reload = true
-
 
 [global/wm]
 margin-top = 8
@@ -33,12 +31,12 @@ scroll-down = bspwm-desknext
 background = ${colors.background}
 foreground = ${colors.foreground}
 
-underline-size = 1
+underline-size = 3
 underline-color = ${colors.linecolor}
-overline-size = 1
+overline-size = 0
 overline-color = ${colors.linecolor}
 
-border-bottom = 2
+border-bottom = 0
 border-bottom-color = ${colors.bordercolor}
 
 spacing = 1
@@ -49,11 +47,11 @@ module-margin-right = 2
 
 font-0 = tamzen:size=9;0
 font-1 = siji:pixelsize=10;-1
-font-2 = unifont:size=6;-2
+font-2 = dejavu:size=8;-2
 
 modules-left = bspwm i3
-modules-center = mpd
-modules-right = xkeyboard xbacklight volume wifi battery memory cpu date
+modules-center = date
+modules-right = xkeyboard xbacklight fs-root battery cpu memory wifi wired volume power-menu
 
 tray-position = right
 tray-padding = 4
@@ -63,7 +61,6 @@ tray-transparent = true
 ;tray-offset-x = -100
 
 wm-restack = bspwm
-
 
 [bar/bottom]
 inherit = bar/top
@@ -85,12 +82,11 @@ wm-restack = ${bar/top.wm-restack}
 
 tray-position = none
 
-
 [module/fs-root]
 type = internal/fs
 mount-0 = /
-label-mounted = %{F#e60053}%percentage_used%%{F-} used of %mountpoint%
-
+label-mounted = %{F#fff}%percentage_used%%{F-} used of %mountpoint%
+format-mounted-underline = #ff81d4fa
 
 [module/bspwm]
 type = internal/bspwm
@@ -104,8 +100,8 @@ format = <label-state> <label-mode>
 ws-icon-default = x
 
 label-focused = o
-label-focused-background = #ee333333
-label-focused-underline= #cc333333
+label-focused-background = #00
+label-focused-underline= #ffB2DFDB
 label-focused-padding = 2
 
 label-occupied = %{O-1}⏺%{O-1}
@@ -140,7 +136,6 @@ label-dimmed-background = ${root.background}
 label-dimmed-underline = ${root.background}
 label-dimmed-active-foreground = #f00
 
-
 [module/i3]
 type = internal/i3
 index-sort = true
@@ -170,18 +165,17 @@ label-visible = %index%
 label-visible-foreground = ${module/bspwm.label-empty-foreground}
 label-visible-padding = ${module/bspwm.label-empty-padding}
 
-
 [module/cpu]
 type = internal/cpu
 interval = 2
-label = %{F#666}%{F#cc} %percentage%
-
+label = %{F#fff}%{F#ff} %percentage%
+format-underline = #ff4DB6AC
 
 [module/memory]
 type = internal/memory
 interval = 2
-label = %{F#666}%{F#cc} %percentage_used%
-
+label = %{F#fff}%{F#ff} %percentage_used%
+format-underline = #ff1DE9B6
 
 [module/wifi]
 type = internal/network
@@ -189,9 +183,11 @@ interface = net1
 interval = 3.0
 ;udspeed-minwidth = 0
 
+format-connected-underline = #ff03A9F4
 format-connected = <ramp-signal> <label-connected>
-label-connected = %{O-6 F#666}%{O2 F#cc}%downspeed:8%
-label-disconnected = %{F#666}%{F#cc} not connected
+label-connected = %{O-6 F#fff}%{O2 F#ff}%downspeed:8%
+format-disconnected-underline = #ff03A9F4
+label-disconnected = %{F#fff}%{F#ff} not connected
 label-disconnected-foreground = #66
 
 ramp-signal-0 = 
@@ -199,34 +195,24 @@ ramp-signal-1 = 
 ramp-signal-2 = 
 ramp-signal-3 = 
 ramp-signal-4 = 
-ramp-signal-foreground = #666
-
+ramp-signal-foreground = #fff
 
 [module/wired]
 type = internal/network
-interface = net0
+interface = enp0s3
 interval = 3.0
 
-label-connected = %{T3}%local_ip%%{T-}
-label-disconnected = %{T3}Not connected%{T-}
-label-disconnected-foreground = #66
-
+format-connected-underline = #ff03A9F4
+label-connected = %{T3}eth: %local_ip%%{T-}
+format-disconnected-underline = #ff03A9F4
+label-disconnected = %{T3}eth: OFFLINE%{T-}
+label-disconnected-foreground = #ff
 
 [module/date]
 type = internal/date
-date = %%{F#666}%{F-} %Y-%m-%d  %%{F#e60053}%%{F-} %H:%M
+date = %%{F#fff}%{F-} %m-%d-%Y  %%{F#fff}%%{F-} %H:%M
 interval = 5
-
-
-[module/xbacklight]
-type = internal/xbacklight
-format = <ramp> <label>
-ramp-0 = 
-ramp-1 = 
-ramp-2 = 
-ramp-foreground = #666
-label-foreground = ${root.foreground}
-
+format-underline = #ff009688
 
 [module/volume]
 type = internal/volume
@@ -235,29 +221,28 @@ speaker-mixer = Speaker
 headphone-mixer = Headphone
 headphone-id = 9
 
+format-underline = #ff9575CD
 format-volume = <ramp-volume> <label-volume>
 label-volume = %percentage%
 label-volume-foreground = ${root.foreground}
 
-format-muted-prefix = " "
-format-muted-foreground = #66
-label-muted = sound muted
+label-muted = 🔇 muted
+label-muted-foreground = #ff
 
-ramp-volume-0 = 
-ramp-volume-1 = 
-ramp-volume-2 = 
-ramp-volume-3 = 
-ramp-volume-foreground = #666
+ramp-volume-0 = 🔈
+ramp-volume-1 = 🔉
+ramp-volume-2 = 🔊
+ramp-volume-foreground = #fff
 
-ramp-headphones-0 = 
-ramp-headphones-1 = 
-
+ramp-headphones-0 = 
+ramp-headphones-1 = 
 
 [module/battery]
 type = internal/battery
 full-at = 98
 time-format = %H:%M
 
+format-underline = #ffe53935
 format-charging = <animation-charging> <label-charging>
 label-charging = %percentage% %time%
 
@@ -266,94 +251,50 @@ label-discharging = %percentage% %time%
 
 format-full = <label-full>
 format-full-prefix = " "
-format-full-prefix-foreground = #666
+format-full-prefix-foreground = #fff
 
 ramp-capacity-0 = 
 ramp-capacity-1 = 
 ramp-capacity-2 = 
-ramp-capacity-foreground = #666
+ramp-capacity-foreground = #fff
 
 animation-charging-0 = 
 animation-charging-1 = 
 animation-charging-2 = 
-animation-charging-foreground = #666
+animation-charging-foreground = #fff
 animation-charging-framerate = 750
-
-
-[module/mpd]
-type = internal/mpd
-
-format-online = <label-time>  <bar-progress>  <label-song>  <icon-prev> <icon-seekb> <icon-stop> <toggle> <icon-seekf> <icon-next>  <icon-repeat> <icon-random>
-format-online-background = #ee333333
-format-online-underline = #cc333333
-format-online-padding = 3
-
-format-offline = <label-offline>
-format-offline-foreground = #66
-
-label-offline = mpd is off
-
-label-song-maxlen = 45
-label-song-ellipsis = true
-
-icon-prev = 
-icon-seekb = 
-icon-stop = 
-icon-play = 
-icon-pause = 
-icon-next = 
-icon-seekf = 
-
-icon-random = 
-icon-repeat = 
-
-toggle-on-foreground = ${colors.accent}
-toggle-off-foreground = #66
-
-bar-progress-width = 15
-bar-progress-indicator = 
-bar-progress-indicator-foreground = #bb
-bar-progress-fill = ─
-bar-progress-fill-foreground = #bb
-bar-progress-fill-font = 3
-bar-progress-empty = ─
-bar-progress-empty-foreground = #44
-bar-progress-empty-font = 3
-
-label-time-foreground = #77
-
 
 [module/power-menu]
 type = custom/menu
 
-label-open = 
+label-open =  power
 label-close = 
 label-separator = /
 
+format-underline = #ffFF5722
 menu-0-0 = Terminate WM
-menu-0-0-foreground = ${colors.accent}
+menu-0-0-foreground = #ff
 menu-0-0-exec = bspc quit -1
 menu-0-1 = Reboot
-menu-0-1-foreground = ${colors.accent}
+menu-0-1-foreground = #ff
 menu-0-1-exec = menu-open-1
 menu-0-2 = Power off
-menu-0-2-foreground = ${colors.accent}
+menu-0-2-foreground = #ff
 menu-0-2-exec = menu-open-2
 
 menu-1-0 = Cancel
-menu-1-0-foreground = ${colors.accent}
+menu-1-0-foreground = #ff
 menu-1-0-exec = menu-open-0
 menu-1-1 = Reboot
-menu-1-1-foreground = ${colors.accent}
+menu-1-1-foreground = #ff
 menu-1-1-exec = sudo reboot
 
 menu-2-0 = Power off
-menu-2-0-foreground = ${colors.accent}
+menu-2-0-foreground = #ff
 menu-2-0-exec = sudo poweroff
 menu-2-1 = Cancel
-menu-2-1-foreground = ${colors.accent}
+menu-2-1-foreground = #ff
 menu-2-1-exec = menu-open-0
-
 
 [module/app-menu]
 type = custom/menu
@@ -367,27 +308,31 @@ menu-0-1-exec = termite
 menu-0-2 = Pcmanfm
 menu-0-2-exec = pcmanfm
 
-
 [module/xkeyboard]
 type = internal/xkeyboard
 
 blacklist-0 = num lock
 
-label-layout = %{F#666}%{F#cc} %layout%
+label-layout = %{F#fff}%{F#ff} %layout%
 
+format-underline = #ffB2DFDB
 label-indicator-padding = 2
 label-indicator-background = ${colors.accent}
-
 
 [module/xwindow]
 type = internal/xwindow
 format = <label>
 label-maxlen = 75
+format-underline = #ff
 
+[module/xbacklight]
+type = internal/xbacklight
+format = <ramp-light>
 
-[module/counter]
-type = internal/counter
-format = <counter>
-interval = 0.1
+ramp-light-0 = 🌕
+ramp-light-1 = 🌔
+ramp-light-2 = 🌓
+ramp-light-3 = 🌒
+ramp-light-4 = 🌑
 
 ; vim:ft=dosini

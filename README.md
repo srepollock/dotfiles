@@ -1,3 +1,9 @@
+# My Interesting Project.
+Going to set up this install system to run on clone from a Git server.
+:beer:
+
+## This is what it currently does...
+
 # dotfiles
 The dotfiles for my Linux system builds
 

@@ -1,6 +1,6 @@
 # zshrc
 # -----
-# Created and maintained by Spencer Pollock
+# Created and maintained by Spencer Pollock (@srepollock)
 # Use at your discretion.
 # Give credit where it is due.
 # -----
@@ -10,7 +10,6 @@ alias l='ls -l'
 alias ll='ls -la'
 alias c='clear'
 alias p='pwd'
-alias pd='pwd'
 alias hy='history'
 alias py='python'
 

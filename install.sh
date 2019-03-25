@@ -5,9 +5,10 @@
 # 3. Check the environment
 # 4. Run the script to install programs
 
-mkdir ~/Documents
-mkdir ~/Documents/git
+mkdir ~/documents
+mkdir ~/documents/git
 
+./backup_dotfiles.sh
 ./copy_dotfiles.sh
 
 os=${OSTYPE//[0-9.-]*/}

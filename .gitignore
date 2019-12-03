@@ -1,0 +1,4 @@
+.dotfile_backup
+.swp
+log.*
+*.log

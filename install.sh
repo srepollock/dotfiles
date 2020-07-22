@@ -5,8 +5,8 @@
 # 3. Check the environment
 # 4. Run the script to install programs
 
-mkdir ~/documents
-mkdir ~/documents/git
+mkdir ~/Documents
+mkdir ~/Documents/git
 
 ./backup_dotfiles.sh
 ./copy_dotfiles.sh

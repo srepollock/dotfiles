@@ -1,0 +1,2 @@
+name: "Dotfile Tester on Docker"
+description: "Tests my dotfiles and their installs on a Docker container to check OS compatability"

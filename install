@@ -109,7 +109,7 @@ def get_args():
     Check out each scripts running file for more information.
     '''
     parser = argparse.ArgumentParser(description=description, epilog=epilog)
-    parser.add_argument('os', help='Name the operating system you\'re going to be using the dotfiles on.')
+    parser.add_argument('os', default='linux', help='Name the operating system you\'re going to be using the dotfiles on.')
     parser.add_argument('--debug', dest='debug', action='store_true', help='Runs the script in debug mode where no action is done.') 
     parser.add_argument('--verbose', dest='verbose', action='store_true', help='Runs the script in verbose mode.') 
     parser.add_argument('-v', '--version', dest='version', action=VersionAction, nargs=0, help='Gets the version of the script')

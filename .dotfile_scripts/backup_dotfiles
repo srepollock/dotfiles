@@ -1,0 +1,8 @@
+#!/bin/bash
+
+date=$(date -R)
+backup_folder=".dotfiles_backup_${date}"
+
+mkdir ~/${backup_folder}
+echo "Moving current dotfiles to backup folder: ~/${backup_folder}"
+rsync -avqh --progress ~/.* ~/${backup_folder} --exclude ~/${backup_folder} --remove-source-files

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+echo "Select your back up to restore:"
+
+ls -d *.dotfile_backup_*/
+
+read selected_dotfile_backup
+
+

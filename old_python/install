@@ -1,0 +1,147 @@
+#!/usr/bin/env python
+'''
+A little script to install the dot files.
+'''
+import argparse
+import curses
+import errno
+import logging
+import progressbar
+import re
+import shlex
+import shutil
+import subprocess
+import sys
+import time
+import os
+from os.path import expanduser
+'''
+Global Variables
+'''
+DEBUG = False
+VERBOSE = False
+'''
+Classes and Functions
+'''
+class VersionAction(argparse.Action):
+    def __call__(self, parser, namespace, values, option_string=None):
+        version = self.get_version()
+        setattr(namespace, self.dest, version)
+    def run_git_command(command): 
+        '''
+        Runs the git command via subprocess. Command is split by shlex.
+
+        Returns true or false for completion.
+        '''
+        global DEBUG
+        if not DEBUG:
+            logging.info('Running run_git_command')
+            process = subprocess.Popen(shlex.split(command), stdout=subprocess.PIPE)
+            (data, err) = process.communicate()
+            if (err):
+                raise Exception()
+                return False
+            else:
+                logging.info('Completed running command: \'{}\''.format(command))
+        else:
+            logging.debug('run_git_command hit but not run. Command would have been: {}'.format(command))
+            return False
+        return True
+    def get_version(self):
+        version = '0.0.0'
+        # TODO: Get the version number based on the latest tag. if none found, version 0.0.0
+        return version
+def copy_anything(src, dst):
+    '''
+    Copies any types of files or directories (recursively) from src -> dest.
+
+    Returns nothing
+    '''
+    try:
+        shutil.copytree(src, dst)
+    except OSError as exc: # python >2.5
+        if exc.errno == errno.ENOTDIR:
+            shutil.copy(src, dst)
+        else: raise
+def install_dotfiles():
+    global DEBUG
+    starter_location = os.path.dirname(os.path.realpath(sys.argv[0]))
+    homedir = expanduser('~')
+    progress = 0
+    with progressbar.ProgressBar(len(os.listdir(starter_location))) as bar:
+        for filename in os.listdir(starter_location):
+            log('Copying file {} -> {}'.format(os.path.join(starter_location, filename), os.path.join(homedir, filename)))
+            if not DEBUG:
+                copy_anything(os.path.join(starter_location, filename), os.path.join(homedir, filename))
+            progress += 1
+            bar.update(progress)
+    log('Finished copying files')
+    return
+def log(message, message_type='info'):
+    # TODO: Properly implement a message type as an enum/dictionary/map
+    if VERBOSE or message_type == 'verbose':
+        print (message)
+        logging.verbose(message)
+    if DEBUG or message_type == 'debug':
+        print (message)
+        logging.debug(message)
+    if not DEBUG and not VERBOSE and not message_type == 'debug' and not message_type == 'verbose':
+        logging.info(message)
+    return
+'''
+Main runners
+'''
+def get_args():
+    '''
+    Gets the arguments for the user
+
+    Returns the arguments from the user in a Key,Value Namespace.
+    '''
+    description = '''
+    Dotfiles install
+    Installs my dotfiles that I use on most computers.
+    This also runs config before installing to ensure there is a backup. \n
+    Created by Spencer Pollock (spencer@spollock.ca)
+    '''
+    epilog = '''
+    If there are any issues, you can run the 'restore' script to bring your backups back.
+    If you have changes that you would like to save as a new save point, run the config script stand alone.
+    Check out each scripts running file for more information.
+    '''
+    parser = argparse.ArgumentParser(description=description, epilog=epilog)
+    parser.add_argument('os', default='linux', help='Name the operating system you\'re going to be using the dotfiles on.')
+    parser.add_argument('--debug', dest='debug', action='store_true', help='Runs the script in debug mode where no action is done.') 
+    parser.add_argument('--verbose', dest='verbose', action='store_true', help='Runs the script in verbose mode.') 
+    parser.add_argument('-v', '--version', dest='version', action=VersionAction, nargs=0, help='Gets the version of the script')
+    return parser.parse_args()
+def main(args):
+    '''
+    Main function for running.
+    '''
+    global DEBUG
+    DEBUG = args.debug
+    global VERBOSE
+    VERBOSE = args.verbose
+    if (DEBUG):
+        log('DEBUG is {}'.format(DEBUG))
+    if (VERBOSE):
+        log('Verbose is {}'.format(VERBOSE))
+    if (args.os == 'macos' or args.os == 'windows' or args.os == 'linux'):
+        process = subprocess.Popen(['./config', args.os, '-l', '-b'], stdout=subprocess.PIPE)
+        (data, err) = process.communicate()
+        if (err):
+            raise Exception()
+        else:
+            log('Completed running config')
+        install_dotfiles()
+    else:
+        log('No operating system selected. Please choose [macOS/windows/linux] instead.')
+    log('Dotfiles have been installed. Have a fun time hacking.', message_type='verbose')
+    return 0
+
+if __name__ == "__main__":
+    logging.basicConfig(format='%(asctime)s - %(message)s', filename='log.install', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
+    args = get_args()
+    main(args)
+    logging.shutdown()
+

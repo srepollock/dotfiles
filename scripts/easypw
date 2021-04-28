@@ -1,0 +1,4 @@
+#!/usr/bin/env bash
+# Generates pronounceable passwords that have sufficient entropy for one-time
+# use.
+pwgen --no-capitalize --num-passwords=5 -C | xargs | sed 's/ /./g'

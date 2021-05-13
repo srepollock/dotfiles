@@ -40,11 +40,10 @@ distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
         ;;
 esac
 
-exit
 shell=${SHELL/\/bin\//.}
 case $shell in
     bash)
-        source ~/.bashrc
+        source $HOME/.bashrc
         ;;
     zsh)
         source $HOME/.zshrc
@@ -55,7 +54,6 @@ esac
 
 printf "Cleaning Up extra folders/files\n"
 rm -rf starter 
-rm install 
 rm -rf .dotfile_scripts/linux* 
 rm -rf .dotfile_scripts/mac*
 
@@ -67,3 +65,4 @@ printf "
                        -------------------
 "
 
+rm install 

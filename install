@@ -11,24 +11,36 @@ if [ ! -d ~/Downloads ]; then
     mkdir ~/Media
 fi
 
-./.dotfile_scripts/backup_dotfiles
-
 os=${OSTYPE//[0-9.-]*/}
 case "$os" in
     darwin)
         ./.dotfile_scripts/mac_setup
-      ;;
+        ./.dotfile_scripts/backup_dotfiles
+        ;;
     msys)
         printf "Windows not supported\n"
-      ;;
+        ;;
     linux)
+distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
+        case $distro in
+            debian)
+                ./.dotfile_scripts/linux_debian_installs        
+                ;;
+            *)
+                printf "Unknown distro $distro\n"
+                exit 1
+                ;;
+        esac
+        ./.dotfile_scripts/backup_dotfiles
         ./.dotfile_scripts/linux_setup
-      ;;
+        ;;
     *)
-    printf "Unknown OS $OSTYPE\n"
-    exit 1
+        printf "Unknown OS $OSTYPE\n"
+        exit 1
+        ;;
 esac
 
+exit
 shell=${SHELL/\/bin\//.}
 case $shell in
     bash)

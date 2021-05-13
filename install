@@ -1,8 +1,16 @@
 #!/bin/bash
 
-mkdir ~/Documents
-mkdir ~/Downloads
-mkdir ~/Media
+if [ ! -d ~/Documents ]; then
+   mkdir ~/Documents
+fi
+if [ ! -d ~/Downloads ]; then
+    mkdir ~/Downloads
+fi
+if [ ! -d ~/Downloads ]; then
+    mkdir ~/Media
+fi
+
+./.dotfile_scripts/backup_dotfiles
 
 os=${OSTYPE//[0-9.-]*/}
 case "$os" in

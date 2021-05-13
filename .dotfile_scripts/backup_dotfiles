@@ -1,8 +1,12 @@
-#!/bin/bash
+#!/bin/sh
 
-date=$(date -R)
-backup_folder=".dotfiles_backup_${date}"
+fdate=$(date +%Y_%m_%d_%H-%M)
+backup_folder=".dotfiles_backup_${fdate}"
 
-mkdir ~/${backup_folder}
-echo "Moving current dotfiles to backup folder: ~/${backup_folder}"
-rsync -avqh --progress ~/.* ~/${backup_folder} --exclude ~/${backup_folder} --remove-source-files
+mkdir $HOME/${backup_folder}
+printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
+EXCLUDE_DIRS="$HOME/${backup_folder}
+$HOME/.dotfile_scripts
+$HOME/install
+$HOME/starter"
+rsync -aqz $HOME/.??* $HOME/${backup_folder}/ --exclude=<(printf "%s" "$EXCLUDE_DIRS";) --remove-source-files

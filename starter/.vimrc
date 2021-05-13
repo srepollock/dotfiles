@@ -14,7 +14,6 @@
 :set ignorecase
 :set smartcase
 :set hlsearch
-:set ignorecase
 
 " Setting some decent VIM settings for programming
 
@@ -29,13 +28,21 @@
 :set showmode                    " show the current mode
 :set clipboard=unnamed           " set clipboard to unnamed to access the system clipboard under windows
 :syntax on                       " turn syntax highlighting on by default
+:set nofixendofline				 " turns off default eol fixing
+:set ffs=unix                    " sets unix file formats
+:set noeol                       " sets no eol by default
+":set list " shows '$' for linux line endings
 
 " Other settings? Don't know from where. Maybe oh_my_zsh?
-set guifont=Inconsolata\ for\ Powerline:h15
-let g:Powerline_symbols = 'fancy'
+" ----------------
+" Fonts
+" set guifont=Inconsolata\ for\ Powerline:h15
+set guifont=Recursive\ Mono\ Casual\ Static\ Medium:h14
 set encoding=utf-8
-set fillchars+=stl:\ ,stlnc:\
 set termencoding=utf-8
+
+let g:Powerline_symbols = 'fancy'
+set fillchars+=stl:\ ,stlnc:\
 
 if has("gui_running")
    let s:uname = system("uname")
@@ -43,47 +50,3 @@ if has("gui_running")
       set guifont=Inconsolata\ for\ Powerline:h15
    endif
 endif
-
-" Vundle stuff
-" https://github.com/vundlevim/vundle.vim
-
-filetype on                  " required
-
-" set the runtime path to include Vundle and initialize
-set rtp+=~/.vim/bundle/Vundle.vim
-call vundle#begin()
-" alternatively, pass a path where Vundle should install plugins
-"call vundle#begin('~/some/path/here')
-
-" let Vundle manage Vundle, required
-Plugin 'VundleVim/Vundle.vim'
-
-" YouCompleteMe code-completion engine for Vim
-Plugin 'valloric/youcompleteme'
-
-" The following are examples of different formats supported.
-" Keep Plugin commands between vundle#begin/end.
-
-" Syntastic (Syntax editor)
-"Plugin 'scrooloose/syntastic'
-
-" NERD Commenter
-Plugin 'scrooloose/nerdcommenter'
-
-" Indetation
-Plugin 'nathanaelkane/vim-indent-guides'
-
-" All of your Plugins must be added before the following line
-call vundle#end()            " required
-filetype plugin indent on    " required
-" To ignore plugin indent changes, instead use:
-"filetype plugin on
-"
-" Brief help
-" :PluginList       - lists configured plugins
-" :PluginInstall    - installs plugins; append `!` to update or just :PluginUpdate
-" :PluginSearch foo - searches for foo; append `!` to refresh local cache
-" :PluginClean      - confirms removal of unused plugins; append `!` to auto-approve removal
-"
-" see :h vundle for more details or wiki for FAQ
-" Put your non-Plugin stuff after this line

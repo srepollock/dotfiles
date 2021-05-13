@@ -27,3 +27,15 @@ case "$os" in
     echo "Unknown OS $OSTYPE"
     exit 1
 esac
+
+case "$SHELL" in
+    bash)
+        source ~/.bashrc
+        ;;
+    zsh)
+        source $HOME/.zshrc
+        ;;
+    *)
+    printf "Unknown shell $SHELL"
+    exit
+esac

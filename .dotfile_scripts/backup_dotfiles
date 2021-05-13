@@ -5,8 +5,8 @@ backup_folder=".dotfiles_backup_${fdate}"
 
 mkdir $HOME/${backup_folder}
 printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
-EXCLUDE_DIRS="$HOME/${backup_folder}
-$HOME/.dotfile_scripts
-$HOME/install
-$HOME/starter"
-rsync -aqz $HOME/.??* $HOME/${backup_folder}/ --exclude=<(printf "%s" "$EXCLUDE_DIRS";) --remove-source-files
+EXCLUDE="$HOME/${backup_folder}/*
+$HOME/.dotfile_scripts/*
+$HOME/install/*
+$HOME/starter/*"
+rsync -aqz $HOME/.??* $HOME/${backup_folder}/ --exclude "$HOME/${backup_folder}/*" --exclude "$HOME/.dotfile_scripts/*" --exclude "$HOME/install/*" --exclude "$HOME/starter/*" --remove-source-files

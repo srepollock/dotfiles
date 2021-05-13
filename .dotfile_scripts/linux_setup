@@ -1,6 +1,4 @@
 #!/bin/sh
 
-#source ./backup_dotfiles
-printf "Copying dotfiles to home for Linux"
-#rsync -avq --progress ../starter/linux/ ~/
-rsync -aqz starter/.[^.]* ~/
+printf "Copying dotfiles to home for Linux\n"
+rsync -aqz $HOME/starter/linux/.??* $HOME/

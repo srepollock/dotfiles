@@ -1,7 +1,7 @@
-#!/bin/bash
+#!/bin/sh
 
 source ./backup_dotfiles
 
-echo "Copying dotfiles to home for macOS"
+printf "Copying dotfiles to home for macOS\n"
 #rsync -avq --progress ../starter/macos/ ~/
-rsync -avq --progress ../starter/ ~/
+rsync -aqz starter/macos/.[^.]* ~/

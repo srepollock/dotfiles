@@ -11,6 +11,8 @@ if [ ! -d ~/Downloads ]; then
     mkdir ~/Media
 fi
 
+chmod +x -R .dotfile_scripts
+
 ./.dotfile_scripts/backup_dotfiles
 
 os=${OSTYPE//[0-9.-]*/}

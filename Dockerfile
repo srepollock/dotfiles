@@ -7,7 +7,11 @@ RUN apt install vim -y \
         wget -y \
         git -y \
         zsh -y \
-        rsync -y
+        rsync -y \
+        fonts-powerline -y \
+        language-pack-en -y
+
+RUN update-locale
 
 RUN sh -c "$(curl -fsSL https://raw.github.com/ohmyzsh/ohmyzsh/master/tools/install.sh)"
 

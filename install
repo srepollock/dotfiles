@@ -1,5 +1,6 @@
 #!/bin/bash
 
+printf "Generating Default Directories\n"
 if [ ! -d ~/Documents ]; then
    mkdir ~/Documents
 fi
@@ -18,17 +19,18 @@ case "$os" in
         ./.dotfile_scripts/mac_setup
       ;;
     msys)
-        echo "Windows not supported"
+        printf "Windows not supported\n"
       ;;
     linux)
         ./.dotfile_scripts/linux_setup
       ;;
     *)
-    echo "Unknown OS $OSTYPE"
+    printf "Unknown OS $OSTYPE\n"
     exit 1
 esac
 
-case "$SHELL" in
+shell=${SHELL/\/bin\//.}
+case $shell in
     bash)
         source ~/.bashrc
         ;;
@@ -36,6 +38,20 @@ case "$SHELL" in
         source $HOME/.zshrc
         ;;
     *)
-    printf "Unknown shell $SHELL"
-    exit
+    printf "Unknown shell $SHELL\n"
 esac
+
+printf "Cleaning Up extra folders/files\n"
+rm -rf starter 
+rm install 
+rm -rf .dotfile_scripts/linux* 
+rm -rf .dotfile_scripts/mac*
+
+printf "Finished dotfile transfer and environment setup\n"
+
+printf "
+                       -------------------
+                       srepollock Dotfiles
+                       -------------------
+"
+

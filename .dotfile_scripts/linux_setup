@@ -1,4 +1,4 @@
 #!/bin/sh
 
 printf "Copying dotfiles to home for Linux\n"
-rsync -aqz $HOME/starter/linux/.??* $HOME/
+rsync -aqz ${HOME}/starter/linux/.??* ${HOME}/

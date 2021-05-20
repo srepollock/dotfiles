@@ -1,0 +1,6 @@
+#!/usr/bin/env bash
+
+printf "Installing Homebrew and some packages\n"
+
+# Install brew
+${HOME}/.dotfile_scripts/macos/brew

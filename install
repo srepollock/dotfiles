@@ -14,8 +14,9 @@ fi
 os=${OSTYPE//[0-9.-]*/}
 case "$os" in
     darwin)
-        ./.dotfile_scripts/mac_setup
+        ./.dotfile_scripts/mac_install
         ./.dotfile_scripts/backup_dotfiles
+        ./.dotfile_scripts/mac_setup
         ;;
     msys)
         printf "Windows not supported\n"

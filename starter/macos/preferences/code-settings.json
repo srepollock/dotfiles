@@ -1,0 +1,56 @@
+{
+    "workbench.colorTheme": "Solarized Dark",
+    "editor.suggestSelection": "first",
+    "vsintellicode.modify.editor.suggestSelection": "automaticallyOverrodeDefaultValue",
+    "python.languageServer": "Pylance",
+    "terminal.integrated.fontFamily": "'Recursive Mono Linear Static', 'Meslo LG S DZ for Powerline'",
+    "terminal.integrated.fontWeightBold": "normal",
+    "editor.fontFamily": "'Recursive Mono Linear Static', Menlo, Monaco, 'Courier New', monospace",
+    "editor.defaultFormatter": "esbenp.prettier-vscode",
+    "explorer.confirmDelete": false,
+    "vsicons.dontShowNewVersionMessage": true,
+    "todohighlight.keywords": [
+        {
+            "text": "TODO:",
+            "color": "#80CBC4",
+            "backgroundColor": "#00695C"
+        },
+        {
+            "text": "DEBUG:",
+            "color": "#EF5350",
+            "backgroundColor": "#B71C1C"
+        },
+        {
+            "text": "BUG:",
+            "color": "#FFA726",
+            "backgroundColor": "#E65100"
+        },
+        {
+            "text" : "REVIEW:",
+            "color": "#7E57C2",
+            "backgroundColor": "#311B92"
+        },
+        {
+            "text": "NOTE:",
+            "color": "#e4daef",
+            "backgroundColor": "#9883ad"
+        },
+        {
+            "text": "HACK:",
+            "color": "#78909C",
+            "backgroundColor": "#37474F",
+            "isWholeLine": false
+        }
+    ],
+    "diffEditor.ignoreTrimWhitespace": true,
+    "window.zoomLevel": -1,
+    "workbench.sideBar.location": "left",
+    "terminal.integrated.cursorStyle": "underline",
+    "terminal.integrated.cursorBlinking": true,
+    "update.mode": "manual",
+    "omnisharp.useGlobalMono": "always",
+    "extensions.autoUpdate": false,
+    "gitlens.advanced.messages": {
+        "suppressCommitHasNoPreviousCommitWarning": true
+    },
+}

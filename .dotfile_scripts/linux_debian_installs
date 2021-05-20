@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_LIST="vim rsync wget curl git zsh fonts-powerline language-pack-en"
+PACKAGE_LIST="vim rsync wget curl git zsh fonts-powerline language-pack-en python python3"
 
 printf "Updating apt\n"
 

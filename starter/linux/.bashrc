@@ -1,9 +1,12 @@
-# Git Good Update Export
-export PATH="$HOME/.gitgood/update:$PATH"
-# Template Grader Export
-export PATH="$HOME/.templater/update:$PATH"
-export PATH="$HOME/.templater/bin:$PATH"
+# Created by Spencer Pollock
 
+# If not running interactively, don't do anything
+[[ $! != *i* ]] && return
 
-# added by travis gem
-[ -f /Users/Spencer/.travis/travis.sh ] && source /Users/Spencer/.travis/travis.sh
+# Set the prompt
+PS1='[\u@\h \W]\$ '
+
+# Load user profile file
+if [ -f ${HOME}/.profile ]; then
+    . !/.profile
+fi

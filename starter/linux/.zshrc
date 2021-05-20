@@ -63,14 +63,14 @@ export LANG=en_US.UTF-8
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='mvim'
+  export EDITOR='vim'
 fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
 # ssh
-export SSH_KEY_PATH="~/.ssh/dsa_id"
+export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # Set personal aliases, overriding those provided by oh-my-zsh libs,
 # plugins, and themes. Aliases can be placed here, though oh-my-zsh
@@ -84,31 +84,12 @@ export SSH_KEY_PATH="~/.ssh/dsa_id"
 # redefine prompt_context for hiding user@hostname
 #prompt_context () { }
 
-#alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
+# Load user profile file
+if [ -f ${HOME}/.profile ]; then
+    . ${HOME}/.profile
+fi
 
-# Git Good Update Export
-#export PATH="$HOME/.gitgood/update:$PATH"
-
-# ---MAC FILES---
-# Add coreutils (brew install coreutils) to PATH
-#PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-# Add gnubin ('g' commands) to your PATH
-#PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-# Add coreutils (brew install coreutils) to MANPATH
-#MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-# MacVim as Vim Alias
-#alias vim='mvim -v'
-#alias vim='nvim'
-
-# Alias
-alias change-zshrc='vim ~/.zshrc'
-alias update-zshrc='source ~/.zshrc'
-alias l='ls -l'
-alias ll='ls -la'
-alias c='clear'
-alias pd='pwd'
-alias cpp11='clang++ -std=c++11'
-alias cpp14='clang++ -std=c++14'
-alias py='python'
-alias brewclean='brew cleanup --force -s && rm -rf $(brew --cache)'
-alias change-vimrc="vim ~/.vimrc"
+# Load Functions
+if [ -f ${HOME}/.functions ]; then
+    . ${HOME}/.functions
+fi

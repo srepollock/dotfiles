@@ -84,31 +84,12 @@ source $ZSH/oh-my-zsh.sh
 # redefine prompt_context for hiding user@hostname
 prompt_context () { }
 
-alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
+# Load user profile file
+if [ -f ${HOME}/.profile ]; then
+    . ${HOME}/.profile
+fi
 
-# Git Good Update Export
-export PATH="$HOME/.gitgood/update:$PATH"
-
-# ---MAC FILES---
-# Add coreutils (brew install coreutils) to PATH
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-# Add gnubin ('g' commands) to your PATH
-PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
-# Add coreutils (brew install coreutils) to MANPATH
-MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
-# MacVim as Vim Alias
-alias vim='mvim -v'
-#alias vim='nvim'
-
-# Alias
-alias change-zshrc='vim ~/.zshrc'
-alias update-zshrc='source ~/.zshrc'
-alias l='ls -l'
-alias ll='ls -la'
-alias c='clear'
-alias pd='pwd'
-alias cpp11='clang++ -std=c++11'
-alias cpp14='clang++ -std=c++14'
-alias py='python'
-alias brewclean='brew cleanup --force -s && rm -rf $(brew --cache)'
-alias change-vimrc="vim ~/.vimrc"
+# Load Functions
+if [ -f ${HOME}/.functions ]; then
+    . ${HOME}/.functions
+fi

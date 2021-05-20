@@ -1,0 +1,15 @@
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[user]
+	name = Spencer Pollock
+	email = spencer@spollock.ca
+[alias]
+	co = checkout
+	tree = log --graph --oneline --all
+	prune-from-origin = remote update origin --prune
+    show-commit-files = diff-tree --no-commit-id --name-only -r
+[init]
+    defaultBranch = trunk

@@ -1,0 +1,1 @@
+ssh -i MacbookAir.pem ec2-user@34.237.37.214

@@ -10,6 +10,9 @@ PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # Add coreutils (brew install coreutils) to MANPATH
 MANPATH="/usr/local/opt/coreutils/libexec/gnuman:$MANPATH"
 
+# Add personal Deno scripts to path
+PATH="/Users/Spencer/.deno/bin:$PATH"
+
 # Alias
 # Change dotfiles
 alias change-zshrc='vim ~/.zshrc'
@@ -38,6 +41,9 @@ alias py3='python3'
 alias extract='tar -xzvf '
 alias createzip='tar -czf '
 
+# File processing
+alias rsync="rsync -arptuz --progress"
+
 # Shell helpers
 alias find_text_in_directory="grep -r -i -Hn" # Then pass {string insensitive} {path/glob/to/dir/**/*.{filetype}
 alias path='echo -e ${PATH//:/\\n}'
@@ -52,7 +58,6 @@ command -v sha1sum > /dev/null || alias sha1sum="shasum"
 alias vim='mvim -v'
 # Visual Studio Code
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
-
 
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
 alias stfu="osascript -e 'set volume output muted true'"

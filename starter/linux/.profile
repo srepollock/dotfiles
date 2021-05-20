@@ -30,6 +30,9 @@ alias py3='python3'
 alias extract='tar -xzvf '
 alias createzip='tar -czf ' 
 
+# File processing
+alias rsync="rsync -arptuz --progress"
+
 # Shell helpers
 alias find_text_in_directory="grep -r -i -Hn" # Then pass {string insensitive} {path/glob/to/dir/**/*.{filetype}
 alias path='echo -e ${PATH//:/\\n}'

@@ -1,5 +1,6 @@
 #!/usr/bin/env python3
-from datetime import timezone
+
+import datetime
 import argparse
 import curses
 import logging
@@ -12,6 +13,9 @@ import requests
 import urllib.request
 import time
 from bs4 import BeautifulSoup
+
+DEBUG=False
+VERBOSE=False
 
 def scrape(url):
     response = requests.get(url)
@@ -47,10 +51,10 @@ def get_args():
     parser.add_argument('output', type=str, nargs=1, help='file to output resluts to.')
     parser.add_argument('-u', '--url', dest='url', type=str, nargs=1, help='The URL to scrape.')
     subparsers = parser.add_subparsers(help='''Action Subparsing''')
-    parser_actions = subparser.add_parser('action', help='''Action Subparser\nActions: -l/--links''')
+    parser_actions = subparsers.add_parser('action', help='''Action Subparser\nActions: -l/--links''')
     parser_actions.add_argument('-l', '--links', action='store_true', help='Gets all links from the page into a text file.')
+    parser.add_argument('--debug', dest='debug', action='store_true', help='Runs the script in debug mode, no actions taken.')
     parser.add_argument('--verbose', dest='verbose', action='store_true', help='Runs the script in verbose mode.') 
-    parser.add_argument('-v', '--version', dest='version', action=VersionAction, nargs=0, help='Gets the version of the script')
     return parser.parse_args()
 
 def main(args):
@@ -71,7 +75,7 @@ def main(args):
     scrape(args.url)
 
 if __name__ == "__main__":
-    logging.basicConfig(format='%(asctime)s - %(message)s', filename='.log'.format(datetime.today().replace(tzinfo=timezone.utc).timestamp()), level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
+    logging.basicConfig(format='%(asctime)s - %(message)s', filename='.log'.format(datetime.datetime.today().replace(tzinfo=datetime.timezone.utc).timestamp()), level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
     args = get_args()
     main(args)
     logging.shutdown()

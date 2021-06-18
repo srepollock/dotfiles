@@ -1,0 +1,8 @@
+#!/bin/bash
+
+printf "Installing Python, Python3\n"
+brew install python python3
+brew link python3
+
+printf "Installing outrun\n"
+pip3 install outrun

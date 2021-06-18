@@ -4,3 +4,4 @@ printf "Installing Homebrew and some packages\n"
 
 # Install brew
 ${HOME}/.dotfile_scripts/macos/brew
+${HOME}/.dotfile_scripts/macos/python_installs

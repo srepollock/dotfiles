@@ -2,3 +2,5 @@
 keyboard
 # ransomware
 fernet
+# apscan
+scapy

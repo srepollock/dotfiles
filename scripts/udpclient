@@ -1,0 +1,22 @@
+#!/usr/bin/env python3
+import socket
+import sys
+
+def usage():
+    print ("Usage: ./udpclient [url] [port]")
+    print ("Example: ./udpclient 127.0.0.1 80")
+    sys.exit(0)
+
+if len(sys.argv) < 3:
+    usage()
+
+target_host = sys.argv[1] 
+target_port = int(sys.argv[2])
+
+try:
+    client = socket.socket(socket.AF_INET, socket.SOCK_DGRAM)
+    client.sendto(b"AABBCCDDEEFF", (target_host,target_port))
+    data, addr = client.recvfrom(4096)
+    print(data.decode())
+except Exception as e:
+    print (e)

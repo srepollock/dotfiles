@@ -17,6 +17,10 @@ case "$os" in
         ./.dotfile_scripts/mac_install
         ./.dotfile_scripts/backup_dotfiles
         ./.dotfile_scripts/mac_setup
+        for f in ./scripts/*; do
+            filename=$(basename $f)
+            sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 
+        done
         ;;
     msys)
         printf "Windows not supported\n"
@@ -34,6 +38,10 @@ distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
         esac
         ./.dotfile_scripts/backup_dotfiles
         ./.dotfile_scripts/linux_setup
+        for f in ./scripts/*; do
+            filename=$(basename $f)
+            sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 
+        done
         ;;
     *)
         printf "Unknown OS $OSTYPE\n"

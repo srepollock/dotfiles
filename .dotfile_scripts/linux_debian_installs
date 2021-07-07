@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_LIST="locales vim rsync wget curl git zsh fonts-powerline python python3"
+PACKAGE_LIST="locales vim rsync wget curl git zsh fonts-powerline python python3 kali-linux-default"
 
 printf "Updating apt\n"
 sudo apt update 

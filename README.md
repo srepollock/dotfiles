@@ -1,6 +1,6 @@
 # dotfiles
 
-[![Open in Visual Studio Code](open.vscode.dev/badges/open-in…)](open.vscode.dev/srepollock/dotfiles)
+[![Open in Visual Studio Code](open.vscode.dev/badges/open-in-vscode.svg)](srepollock/dotfiles)
 
 ```
                                                                                                                               

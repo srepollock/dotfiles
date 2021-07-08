@@ -2,6 +2,10 @@
 
 PACKAGE_LIST="locales vim rsync wget curl git zsh fonts-powerline python python3 kali-linux-default"
 
+printf "Adding GitHub CLI package repository to apt\n"
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
 printf "Updating apt\n"
 sudo apt update 
 
@@ -23,3 +27,6 @@ sudo apt install python-pip python3-pip
 
 printf "Installing outrun\n"
 pip3 install outrun
+
+printf "Installing gh cli\n"
+sudo apt install gh

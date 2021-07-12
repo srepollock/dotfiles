@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PACKAGE_LIST="locales vim rsync wget curl git zsh fonts-powerline python python3 kali-linux-default"
+PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh fonts-powerline python python3 kali-linux-default"
 
 printf "Adding GitHub CLI package repository to apt\n"
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg

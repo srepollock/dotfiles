@@ -49,6 +49,8 @@ distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
         ;;
 esac
 
+chsh -s /bin/zsh
+
 shell=${SHELL/\/bin\//.}
 case $shell in
     bash)

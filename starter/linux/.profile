@@ -18,6 +18,7 @@ alias pd='pwd'
 # Disk sizes
 alias disksize='df -h'
 alias dirsize='du -h | tail -n 1'
+alias ducks='du -hsxc * | sort -rn | head'
 
 # Script Compilation
 alias cpp11='clang++ -std=c++11'

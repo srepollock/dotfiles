@@ -4,4 +4,4 @@ printf "Copying dotfiles to home for Linux\n"
 directory=$(pwd)
 rsync -aqz ${directory}/starter/linux/.??* ${HOME}/
 printf "Copying script files to home\n"
-rsync -aqz ${directory}/scripts/linux/ ${HOME}/
+rsync -aqz ${directory}/scripts/ ${HOME}/

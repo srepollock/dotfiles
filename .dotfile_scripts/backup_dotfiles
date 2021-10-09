@@ -8,5 +8,6 @@ printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
 EXCLUDE="$HOME/${backup_folder}
 $HOME/.dotfile_scripts
 $HOME/install
-$HOME/starter"
+$HOME/starter
+$HOME/.Trash"
 rsync -aqz --delete --exclude=<(printf "%s" "$EXCLUDE";) $HOME/.??* $HOME/$backup_folder/

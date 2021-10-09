@@ -1,7 +1,5 @@
 #!/bin/sh
 
-source ./backup_dotfiles
-
 printf "Copying dotfiles to home for macOS\n"
 #rsync -avq --progress ../starter/macos/ ~/
 directory=$(pwd)

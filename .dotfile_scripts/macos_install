@@ -3,7 +3,7 @@
 printf "Installing Homebrew and some packages\n"
 
 # Install brew
-${HOME}/.dotfile_scripts/macos/brew
+./.dotfile_scripts/macos/brew
 
 printf "Installing Python and stuff\n"
-${HOME}/.dotfile_scripts/macos/python_installs
+./.dotfile_scripts/macos/python_installs

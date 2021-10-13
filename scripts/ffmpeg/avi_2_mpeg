@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ffmpeg -i $1.avi -target pal-dvd -ps 2000000000 -aspect 16:9 $2.mpeg

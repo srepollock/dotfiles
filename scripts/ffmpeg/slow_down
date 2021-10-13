@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ffmpeg -i $1.mpg -vf "setpts=4.0*PTS" $2.mpg -hide_banner

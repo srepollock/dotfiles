@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ffmpeg -txt_format text -i $1 $2.srt

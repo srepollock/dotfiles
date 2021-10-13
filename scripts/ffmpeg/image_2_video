@@ -1,0 +1,2 @@
+#!/bin/bash
+ffmpeg -f $1 -i image%d.jpg $2.mpg

@@ -1,0 +1,3 @@
+#!/bin/bash
+
+ffmpeg -i $1.mp4 -i $2.srt -map 0 -map 1 -c copy -c:v libx264 -crf 23 -preset veryfast $3.mkv

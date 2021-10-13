@@ -1,0 +1,9 @@
+#!/bin/bash
+
+# while getopts “:a:bc” opt; do
+#     case $opt in
+#         a) AOPT=$OPTARG ;;
+#     esac
+# done
+
+ffmpeg -i $1    -hide_banner

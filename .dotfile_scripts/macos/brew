@@ -61,6 +61,7 @@ brew install lynx
 
 # Cloud providers
 brew install awscli
+brew install terraform
 
 # Programming goodness
 brew install --cask visual-studio-code

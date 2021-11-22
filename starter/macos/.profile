@@ -58,6 +58,11 @@ command -v sha1sum > /dev/null || alias sha1sum="shasum"
 alias vim='mvim -v'
 # Visual Studio Code
 alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
+# Toggle finder dotfiles on/off
+alias AllFilesTRUE='defaults write com.apple.finder AppleShowAllFiles TRUE; killall Finder'
+alias AllFilesFALSE='defaults write com.apple.finder AppleShowAllFiles FALSE; killall Finder'
+# VLC
+alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
 
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
 alias stfu="osascript -e 'set volume output muted true'"
@@ -66,7 +71,7 @@ alias pumpitup="osascript -e 'set volume output volume 100'"
 # Git alias
 alias last_commit="git rev-parse head"
 alias git-tree='git log --graph --oneline --all'
-
+alias restore-clean='git reset head --hard; git clean -df'
 
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"

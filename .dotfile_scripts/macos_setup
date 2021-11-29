@@ -6,7 +6,7 @@ directory=$(pwd)
 rsync -aqz ${directory}/starter/macos/.??* ${HOME}/
 
 printf "Copying script files to home\n"
-rsync -aqz ${directory}/scripts/ ${HOME}/
+rsync -aqz ${directory}/scripts ${HOME}/
 
 # Install the Solarized Dark theme for iTerm
 printf "Install iTerm Theme\n"

@@ -18,6 +18,9 @@ sudo apt upgrade
 printf "Installing packages for Debian Linux\n"
 sudo apt install -y $PACKAGE_LIST
 
+printf "Changing shell to zsh\n"
+sudo chsh -s /usr/bin/zsh $USER
+
 printf "Updating Locale\n"
 LANG="en_US.UTF-8"
 locale-gen

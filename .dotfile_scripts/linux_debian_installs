@@ -1,13 +1,10 @@
 #!/bin/bash
 
-PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh fonts-powerline python python3 kali-linux-default"
+PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh fonts-powerline python python3"
 
 printf "Adding GitHub CLI package repository to apt\n"
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
-
-printf "Adding Kali package repository to apt\n"
-echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
 
 printf "Updating apt\n"
 sudo apt update 
@@ -17,6 +14,23 @@ sudo apt upgrade
 
 printf "Installing packages for Debian Linux\n"
 sudo apt install -y $PACKAGE_LIST
+
+printf "Adding Kali package repository to apt\n"
+echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
+echo "deb https://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
+
+printf "Installing Kali signature\n"
+wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb
+sudo dpkg -i kali-archive-keyring_2020.2_all.deb
+
+printf "Updating apt with kali and signature\n"
+sudo apt update 
+
+printf "Upgrade apt with kali and signature\n"
+sudo apt upgrade
+
+printf "Installing Kali\n"
+sudo apt install -y kali-linux-default
 
 printf "Changing shell to zsh\n"
 sudo chsh -s /usr/bin/zsh $USER

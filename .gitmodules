@@ -1,3 +1,6 @@
 [submodule "private-scripts"]
 	path = private-scripts
 	url = git@github.com:srepollock/private-scripts.git
+[submodule "Log-killer"]
+	path = scripts/Log-killer
+	url = git@github.com:Rizer0/Log-killer.git

@@ -1,0 +1,21 @@
+#!/bin/bash
+
+sudo su
+echo > /var/log/auth.log
+echo > /var/log/syslog
+echo > /var/log/wtmp
+echo > /var/log/btmp
+echo > /var/log/lastlog
+echo > /var/log/messages
+echo > /var/log/secure
+echo > /var/log/boot.log
+echo > /var/log/dmesg
+echo > /var/log/kern.log
+echo > /var/log/faillog
+echo > /var/log/cron
+echo > /var/log/yum.log
+echo > /var/log/maillog
+echo > /var/log/mail.log
+rm -rf /var/log/httpd/*
+echo > /var/log/mysqld.log
+echo > /var/log/mysql.log

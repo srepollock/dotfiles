@@ -4,3 +4,6 @@ keyboard
 fernet
 # apscan
 scapy
+# sytem_stats
+python-dotenv
+psutil

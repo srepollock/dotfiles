@@ -4,3 +4,6 @@
 [submodule "Log-killer"]
 	path = scripts/Log-killer
 	url = git@github.com:Rizer0/Log-killer.git
+[submodule "windows-admin"]
+    path = scripts/windows-admin
+    url = git@github.com:srepollock/py-windows-admin.git

@@ -26,6 +26,9 @@ alias ll='ls -la'
 alias c='clear'
 alias pd='pwd'
 
+# Users
+alias get-all-users="awk -F: '{print $1}' /etc/passwd"
+
 # Dist sizes
 alias disksize='df -h'
 alias dirsize='du -hh | tail -n 1'

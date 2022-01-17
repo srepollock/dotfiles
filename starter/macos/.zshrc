@@ -50,6 +50,10 @@ COMPLETION_WAITING_DOTS="true"
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.  plugins=(git) 
 # User configuration
+plugins=(
+    zsh-autosuggestions
+    zsh-syntax-highlighting
+)
 
 export PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:/usr/local/bin:/usr/bin:/bin:/usr/sbin:/sbin:$HOME/bin"
 # export MANPATH="/usr/local/man:$MANPATH"

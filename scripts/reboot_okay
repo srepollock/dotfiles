@@ -58,29 +58,8 @@ load_dotenv()
 '''
 Functions
 '''
-def sys_info():
-    status = False
-    output = ''
-    # gives a single float value
-    if (psutil.cpu_percent() > 70):
-        status = True
-    cpu = 'CPU: {}'.format(psutil.cpu_percent())
-    output += cpu + '\n'
-    logging.log(logging.INFO, cpu)
-
-    if (psutil.virtual_memory().percent > 70):
-        status = True
-    mem = 'MEM: {}/{} MB'.format(psutil.virtual_memory().active>>20, psutil.virtual_memory().total>>20)
-    output += mem + '\n'
-    logging.log(logging.INFO, mem)
-
-    if (psutil.disk_usage('/').percent > 70):
-        status = True
-    dsk = 'DSK: total: {}GB, used {}GB, free {}GB'.format(psutil.disk_usage('/')[0]>>30, psutil.disk_usage('/')[1]>>30, psutil.disk_usage('/')[2]>>30)
-    output += dsk + '\n'
-    logging.log(logging.INFO, dsk)
-
-    return status, output
+def reboot_message():
+    return 'Server has rebooted.'
 
 def discord_webhook():
     '''
@@ -99,9 +78,6 @@ def discord_webhook():
 '''
 Classes
 '''
-class ExampleClass:
-    def __init__(self):
-        pass
 
 '''
 Main runners
@@ -138,20 +114,18 @@ def main(args):
         config = configparser.ConfigParser()
         config.read(os.path.abspath(os.path.join(os.path.dirname(__file__), args.configfile)))
     # Start main
-    status, output = sys_info()
+    output = reboot_message()
     TO_EMAIL = config['DEFAULT']['TO_EMAIL']
     CC_EMAIL = config['DEFAULT']['CC_EMAIL']
     EMAIL_SUBJECT = config['DEFAULT']['EMAIL_SUBJECT']
     EMAIL_BODY = config['DEFAULT']['EMAIL_BODY'].format(output)
-    if status and not DEBUG:
-        send_email(email_to_list=TO_EMAIL, email_cc_list=CC_EMAIL, email_subject=EMAIL_SUBJECT, email_body=EMAIL_BODY)
-    logging.log(logging.INFO, "[**] Status, Output:")
-    logging.log(logging.INFO, status)
-    logging.log(logging.INFO, output)
-    status, output = discord_webhook()
-    logging.log(logging.INFO, "[**] Status, Output:")
-    logging.log(logging.INFO, status)
-    logging.log(logging.INFO, output)
+    if not DEBUG:
+        output = discord_webhook()
+        logging.log(logging.INFO, "[**] Output:")
+        logging.log(logging.INFO, output)
+    else:
+        logging.log(logging.DEBUG, "[**] Output:")
+        logging.log(logging.DEBUG, output)
     # End main
     return 0
 

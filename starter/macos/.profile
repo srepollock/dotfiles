@@ -26,6 +26,9 @@ alias ll='ls -la'
 alias c='clear'
 alias pd='pwd'
 
+# Users
+alias get-all-users="awk -F: '{print $1}' /etc/passwd"
+
 # Dist sizes
 alias disksize='df -h'
 alias dirsize='du -hh | tail -n 1'
@@ -43,6 +46,8 @@ alias createzip='tar -czf '
 
 # File processing
 alias rsync="rsync -arptuz --progress"
+## Example: rsync -am --include='default.cfg' --include='*/' --exclude='*' ubuntu@3.98.250.249:/home/ubuntu/vm-monorepo/ ./ 
+alias rsync-files-of-type="rsync -am --include='$1' --include='*/' --exclude='*' $2 $3"
 
 # Shell helpers
 alias find_text_in_directory="grep -r -i -Hn" # Then pass {string insensitive} {path/glob/to/dir/**/*.{filetype}

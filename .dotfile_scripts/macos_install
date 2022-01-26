@@ -7,3 +7,7 @@ printf "Installing Homebrew and some packages\n"
 
 printf "Installing Python and stuff\n"
 ./.dotfile_scripts/macos/python_installs
+
+printf "Installing Zsh Plugins\n"
+git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
+git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting

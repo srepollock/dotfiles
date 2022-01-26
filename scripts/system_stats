@@ -39,7 +39,13 @@ from email.mime.text import MIMEText
 Libraries
 '''
 import psutil
+from psutil._common import bytes2human
 from dotenv import load_dotenv
+
+'''
+Local Modules
+'''
+sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..', 'lib')))
 
 '''
 Global variables
@@ -63,20 +69,23 @@ def sys_info():
     output = ''
     # gives a single float value
     if (psutil.cpu_percent() > 70):
-        status = True
+        # status = True
+        logging.log(logging.INFO, "[**] CPU status = True")
     cpu = 'CPU: {}'.format(psutil.cpu_percent())
     output += cpu + '\n'
     logging.log(logging.INFO, cpu)
 
     if (psutil.virtual_memory().percent > 70):
         status = True
-    mem = 'MEM: {}/{} MB'.format(psutil.virtual_memory().active>>20, psutil.virtual_memory().total>>20)
+        logging.log(logging.INFO, "[**] MEM status = True")
+    mem = 'MEM: {}/{} MB'.format(bytes2human(psutil.virtual_memory().active), bytes2human(psutil.virtual_memory().total))
     output += mem + '\n'
     logging.log(logging.INFO, mem)
 
     if (psutil.disk_usage('/').percent > 70):
         status = True
-    dsk = 'DSK: total: {}GB, used {}GB, free {}GB'.format(psutil.disk_usage('/')[0]>>30, psutil.disk_usage('/')[1]>>30, psutil.disk_usage('/')[2]>>30)
+        logging.log(logging.INFO, "[**] DSK status = True")
+    dsk = 'DSK: total: {}, used {}, free {}'.format(bytes2human(psutil.disk_usage('/')[0]), bytes2human(psutil.disk_usage('/')[1]), bytes2human(psutil.disk_usage('/')[2]))
     output += dsk + '\n'
     logging.log(logging.INFO, dsk)
 
@@ -97,13 +106,6 @@ def discord_webhook():
     return status, output
 
 '''
-Classes
-'''
-class ExampleClass:
-    def __init__(self):
-        pass
-
-'''
 Main runners
 '''
 def get_args():
@@ -111,6 +113,7 @@ def get_args():
     A good Python example script.
     '''
     parser = argparse.ArgumentParser(description='A fancy description goes here for your script.')
+    parser.add_argument('--update', dest='update', action='store_true', help='Sends updates to Google Chat; Used by the root crontab')
     parser.add_argument('--config', dest='configfile', type=str, default='default.cfg', help='Config file to use. Local Global: DEFAULT_CONFIG to \'default.cfg\'.')
     parser.add_argument('--debug', dest='debug', action='store_true', help='Runs debug statements and checks without processing.') # NOTE: to be implemented later
     parser.add_argument('--verbose', dest='verbose', action='store_true', help='Runs the script in verbose mode.') 
@@ -138,25 +141,28 @@ def main(args):
         config = configparser.ConfigParser()
         config.read(os.path.abspath(os.path.join(os.path.dirname(__file__), args.configfile)))
     # Start main
+    logging.log(logging.INFO, "[**] sys_info started")
     status, output = sys_info()
     TO_EMAIL = config['DEFAULT']['TO_EMAIL']
     CC_EMAIL = config['DEFAULT']['CC_EMAIL']
     EMAIL_SUBJECT = config['DEFAULT']['EMAIL_SUBJECT']
     EMAIL_BODY = config['DEFAULT']['EMAIL_BODY'].format(output)
     if status and not DEBUG:
-        send_email(email_to_list=TO_EMAIL, email_cc_list=CC_EMAIL, email_subject=EMAIL_SUBJECT, email_body=EMAIL_BODY)
-    logging.log(logging.INFO, "[**] Status, Output:")
-    logging.log(logging.INFO, status)
-    logging.log(logging.INFO, output)
-    status, output = discord_webhook()
-    logging.log(logging.INFO, "[**] Status, Output:")
-    logging.log(logging.INFO, status)
-    logging.log(logging.INFO, output)
+#        send_email(email_to_list=TO_EMAIL, email_cc_list=CC_EMAIL, email_subject=EMAIL_SUBJECT, email_body=EMAIL_BODY)
+        logging.log(logging.INFO, "[**] Status, Output:")
+        logging.log(logging.INFO, status)
+        logging.log(logging.INFO, output)
+    if not DEBUG or args.update:
+        status, output = google_webhook()
+        logging.log(logging.INFO, "[**] Status, Output:")
+        logging.log(logging.INFO, status)
+        logging.log(logging.INFO, output)
+    logging.log(logging.INFO, "[**] sys_info finished")
     # End main
     return 0
 
 if __name__ == '__main__':
-    logging.basicConfig(format='%(asctime)s - %(message)s', filename='sys_info.log', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
+    logging.basicConfig(format='%(asctime)s - %(message)s', filename='system_stats.log', level=logging.DEBUG, datefmt='%Y-%m-%d %H:%M:%S')
     args = get_args()
     main(args)
     logging.shutdown()

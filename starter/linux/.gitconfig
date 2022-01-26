@@ -11,5 +11,6 @@
 	tree = log --graph --oneline --all
 	prune-from-origin = remote update origin --prune
     show-commit-files = diff-tree --no-commit-id --name-only -r
+    last-commit = rev-parse --short
 [init]
     defaultBranch = trunk

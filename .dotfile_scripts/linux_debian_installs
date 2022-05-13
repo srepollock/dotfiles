@@ -17,8 +17,9 @@ sudo apt install -y $PACKAGE_LIST
 
 printf "Adding Kali package repository to apt\n"
 echo "deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
+echo "deb-src http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
 echo "deb https://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
-ehco "deb http://http.kali.org/ /kali main contrib non-free" | sudo tee /etc/apt/sources.list
+echo "deb http://http.kali.org/ /kali main contrib non-free" | sudo tee /etc/apt/sources.list
 echo "deb http://http.kali.org/ /wheezy main contrib non-free" | sudo tee /etc/apt/sources.list
 echo "deb http://http.kali.org/kali kali-dev main contrib non-free" | sudo tee /etc/apt/sources.list
 echo "deb http://http.kali.org/kali kali-dev main/debian-installer" | sudo tee /etc/apt/sources.list
@@ -30,8 +31,9 @@ echo "deb http://security.kali.org/kali-security kali/updates main contrib non-f
 echo "deb-src http://security.kali.org/kali-security kali/updates main contrib non-free" | sudo tee /etc/apt/sources.list
 
 printf "Installing Kali signature\n"
-wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb
-sudo dpkg -i kali-archive-keyring_2020.2_all.deb
+#wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb
+#sudo dpkg -i kali-archive-keyring_2020.2_all.deb
+wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
 
 printf "Updating apt with kali and signature\n"
 sudo apt update 

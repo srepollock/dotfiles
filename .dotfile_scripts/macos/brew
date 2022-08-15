@@ -59,6 +59,9 @@ brew install imagemagick --with-eebp
 brew install tree
 brew install lynx
 brew install --cask stats
+brew install docker
+brew install docker-compose
+brew install docker-machine
 
 # Cloud providers
 brew install awscli

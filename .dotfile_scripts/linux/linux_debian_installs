@@ -62,3 +62,7 @@ pip3 install outrun
 
 printf "Installing gh cli\n"
 sudo apt install gh
+
+printf "Installing Fonts\n"
+./.dotfile_scripts/linux/linux_fonts
+

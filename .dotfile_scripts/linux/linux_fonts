@@ -1,0 +1,22 @@
+#!/bin/bash
+
+# Powerline Fonts https://github.com/powerline/fonts
+git clone https://github.com/powerline/fonts.git --depth=1
+cd fonts
+./install.sh
+cd ..
+rm -rf fonts
+
+# Nerd Fonts https://github.com/ryanoasis/nerd-fonts
+git clone --depth 1 https://github.com/ryanoasis/nerd-fonts
+cd nerd-fonts
+./install.sh
+cd ..
+rm -rf nerd-fonts
+
+# Recursive v1.085 ArrowType-Recursive-1.085.zip
+wget --no-check-certificate https://github.com/arrowtype/recursive/releases/download/v1.085/ArrowType-Recursive-1.085.zip -O ./ArrowType-Recursive-1.085.zip
+unzip ArrowType-Recursive-1.085.zip
+mkdir ~/.local/share/fonts
+cp Recursive_Desktop/separate_statics/TTF/*.ttf ~/.local/share/fonts/
+fc-cache -f -v

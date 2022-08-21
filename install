@@ -29,7 +29,7 @@ case "$os" in
 distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
         case $distro in
             debian)
-                ./.dotfile_scripts/linux_debian_installs        
+                ./.dotfile_scripts/linux/linux_debian_installs        
                 ;;
             *)
                 printf "Unknown distro $distro\n"
@@ -37,7 +37,7 @@ distro=$(cat /etc/*-release | grep ID_LIKE= | sed "s/ID_LIKE=//")
                 ;;
         esac
         ./.dotfile_scripts/backup_dotfiles
-        ./.dotfile_scripts/linux_setup
+        ./.dotfile_scripts/linux/linux_setup
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)
             sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 

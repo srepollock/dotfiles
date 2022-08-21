@@ -11,3 +11,6 @@ printf "Installing Python and stuff\n"
 printf "Installing Zsh Plugins\n"
 git clone https://github.com/zsh-users/zsh-autosuggestions.git $HOME/.oh-my-zsh/custom/plugins/zsh-autosuggestions
 git clone https://github.com/zsh-users/zsh-syntax-highlighting.git $HOME/.oh-my-zsh/custom/plugins/zsh-syntax-highlighting
+
+printf "Installing Fonts\n"
+./.dotfile_scripts/macos/fonts

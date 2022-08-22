@@ -33,7 +33,7 @@ echo "deb-src http://security.kali.org/kali-security kali/updates main contrib n
 printf "Installing Kali signature\n"
 #wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb
 #sudo dpkg -i kali-archive-keyring_2020.2_all.deb
-wget -q -O - https://archive.kali.org/archive-key.asc  | apt-key add
+wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
 
 printf "Updating apt with kali and signature\n"
 sudo apt update 

@@ -41,7 +41,7 @@ printf "Updating apt with kali and signature\n"
 sudo apt update 
 
 printf "Upgrade apt with kali and signature\n"
-sudo apt upgrade
+sudo apt upgrade -y
 
 printf "Installing Kali\n"
 sudo apt install -y kali-linux-default

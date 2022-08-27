@@ -31,6 +31,8 @@ distro=$(cat /etc/*-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
             debian)
                 ./.dotfile_scripts/linux/linux_debian_installs        
                 ;;
+            ubuntu)
+                ./.dotfile_scripts/linux/linux_debian_installs
             *)
                 printf "Unknown distro $distro\n"
                 exit 1

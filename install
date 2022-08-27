@@ -26,7 +26,7 @@ case "$os" in
         printf "Windows not supported\n"
         ;;
     linux)
-distro=$(cat /etc/*-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
+distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
         case $distro in
             debian)
                 ./.dotfile_scripts/linux/linux_debian_installs        

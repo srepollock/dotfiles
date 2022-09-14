@@ -71,6 +71,10 @@ brew tap hashicorp/terraform
 brew install --cask visual-studio-code
 brew install python
 
+# Terraform
+brew tap hashicorp/tap
+brew install hashicorp/tap/terraform
+
 # Install font tools.
 #brew tap bramstein/webfonttools
 #brew install sfnt2woff

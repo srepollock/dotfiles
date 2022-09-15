@@ -67,6 +67,8 @@ brew install docker-machine
 brew install awscli
 brew tap hashicorp/terraform
 
+brew install ansible
+
 # Programming goodness
 brew install --cask visual-studio-code
 brew install python

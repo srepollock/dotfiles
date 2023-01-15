@@ -3,7 +3,8 @@
 PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh fonts-powerline python python3"
 
 printf "Adding GitHub CLI package repository to apt\n"
-curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo gpg --dearmor -o /usr/share/keyrings/githubcli-archive-keyring.gpg
+curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
+sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg
 echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
 printf "Updating apt\n"
@@ -17,8 +18,8 @@ sudo apt install -y $PACKAGE_LIST
 
 printf "Adding Kali package repository to apt\n"
 echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list
-echo "deb-src http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee /etc/apt/sources.list
+echo "deb-src http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee -a /etc/apt/sources.list
+echo "#deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
 echo "#deb-src http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
 echo "#deb https://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
 echo "#deb http://http.kali.org/ /kali main contrib non-free" | sudo tee -a /etc/apt/sources.list

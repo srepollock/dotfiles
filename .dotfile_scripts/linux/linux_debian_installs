@@ -58,8 +58,9 @@ wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
 printf "Updating apt with kali and signature\n"
 sudo apt update 
 
-printf "Upgrade apt with kali and signature\n"
-sudo apt upgrade -y
+# NOTE: Breaks ssh
+#printf "Upgrade apt with kali and signature\n"
+#sudo apt upgrade -y
 
 printf "Installing Kali\n"
 sudo apt install -y kali-linux-default

@@ -1,5 +1,8 @@
 #!/bin/sh
 
+printf "Setting sshd to start on computer boot\n"
+line="@reboot /etc/init.d/sshd start" # /etc/init.d/ssh start # for CentOS/RHEL/Fedora Linux
+(crontab -u $(whoami) -l; echo "$line" ) | crontab -u $(whoami) -
 printf "Copying dotfiles to home for Linux\n"
 directory=$(pwd)
 rsync -aqz ${directory}/starter/linux/.??* ${HOME}/

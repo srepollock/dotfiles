@@ -7,7 +7,7 @@ sudo apt update -y
 
 printf "Installing gnupg, gnupg1, gnupg2\n"
 sudo apt install -y gnupg 
-sudo apt isntall -y gnupg1 
+sudo apt install -y gnupg1 
 sudo apt install -y gnupg2
 
 printf "Adding GitHub CLI package repository to apt\n"

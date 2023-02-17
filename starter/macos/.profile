@@ -45,7 +45,7 @@ alias extract='tar -xzvf '
 alias createzip='tar -czf '
 
 # File processing
-alias rsync="rsync -arptuz --progress"
+alias rsync="rsync -ahprtuvz --info=progress2"
 ## Example: rsync -am --include='default.cfg' --include='*/' --exclude='*' ubuntu@3.98.250.249:/home/ubuntu/vm-monorepo/ ./ 
 alias rsync-files-of-type="rsync -am --include='$1' --include='*/' --exclude='*' $2 $3"
 

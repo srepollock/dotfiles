@@ -130,6 +130,9 @@ brew install xz
 #brew install vbindiff
 #brew install zopfli
 
+# HTOP alternative
+brew install btop
+
 # Install zsh
 brew install zsh
 

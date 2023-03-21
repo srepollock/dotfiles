@@ -66,8 +66,14 @@ alias code="/Applications/Visual\ Studio\ Code.app/Contents/MacOS/Electron"
 # Toggle finder dotfiles on/off
 alias AllFilesTRUE='defaults write com.apple.finder AppleShowAllFiles TRUE; killall Finder'
 alias AllFilesFALSE='defaults write com.apple.finder AppleShowAllFiles FALSE; killall Finder'
+# Airport
+alias airport='/System/Library/PrivateFrameworks/Apple80211.framework/Versions/Current/Resources/airport'
+# Wireless Network Keychain
+alias wifi-keychain='open -a "keychain access"'
 # VLC
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
+# Wireshark
+alias wireshark='sudo /Applications/Wireshark.app/Contents/MacOS/Wireshark'
 
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
 alias stfu="osascript -e 'set volume output muted true'"
@@ -81,5 +87,11 @@ alias restore-clean='git reset head --hard; git clean -df'
 # IP addresses
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
+
+# Home SMB FTP
+alias connect-home="open smb://spwn@APOLLO/"
+
+# Python thread safety in macOS resolution
+export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
 export PATH

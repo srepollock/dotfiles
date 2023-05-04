@@ -66,9 +66,13 @@ brew install docker-machine
 
 # Cloud providers
 brew install awscli
-brew tap hashicorp/terraform
 
+# Backups
+brew install s3cmd
+
+# Provisioning
 brew install ansible
+brew tap hashicorp/terraform
 
 # Programming goodness
 brew install --cask visual-studio-code

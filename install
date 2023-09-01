@@ -14,9 +14,9 @@ fi
 os=${OSTYPE//[0-9.-]*/}
 case "$os" in
     darwin)
-        ./.dotfile_scripts/macos_install
+        ./.dotfile_scripts/macos/macos_install
         ./.dotfile_scripts/backup_dotfiles
-        ./.dotfile_scripts/macos_setup
+        ./.dotfile_scripts/macos/macos_setup
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)
             sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 

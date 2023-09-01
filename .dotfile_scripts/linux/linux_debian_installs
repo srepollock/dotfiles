@@ -3,7 +3,10 @@
 PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python python3"
 
 printf "Updating apt\n"
-sudo apt update -y 
+sudo apt update -y
+
+printf "Install software-properties-common\n"
+sudo apt install software-properties-common
 
 printf "Installing gnupg, gnupg1, gnupg2\n"
 sudo apt install -y gnupg 
@@ -20,6 +23,9 @@ type -p curl >/dev/null || sudo apt install curl -y
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg \
 && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
 && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
+
+printf "Adding deadsnakes for python"
+sudo add-apt-repository ppa:deadsnakes/ppa
 
 printf "Installing gpg keys for kali cli\n"
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6

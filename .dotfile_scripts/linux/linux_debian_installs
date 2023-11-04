@@ -1,5 +1,7 @@
 #!/bin/bash
 
+DEBIAN_FRONTEND=noninteractive
+
 PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python python3"
 
 printf "Updating apt\n"

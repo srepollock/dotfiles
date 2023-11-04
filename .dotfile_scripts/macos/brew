@@ -64,6 +64,9 @@ brew install docker
 brew install docker-compose
 brew install docker-machine
 
+# Password Managers
+brew install 1password-cli
+
 # Cloud providers
 brew install awscli
 

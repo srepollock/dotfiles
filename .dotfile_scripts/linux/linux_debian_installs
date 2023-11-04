@@ -3,7 +3,7 @@
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
 
-PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python python3"
+PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python python3 nodejs yarn"
 
 printf "Updating apt\n"
 sudo apt update -y

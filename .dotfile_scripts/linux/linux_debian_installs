@@ -11,9 +11,9 @@ printf "Install software-properties-common\n"
 sudo apt install -y software-properties-common
 
 printf "Installing gnupg, gnupg1, gnupg2\n"
-sudo apt install -y gnupg 
-sudo apt install -y gnupg1 
-sudo apt install -y gnupg2
+sudo apt install -yqq gnupg 
+sudo apt install -yqq gnupg1 
+sudo apt install -yqq gnupg2
 
 printf "Adding GitHub CLI package repository to apt\n"
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
@@ -33,13 +33,13 @@ printf "Installing gpg keys for kali cli\n"
 sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
 
 printf "Updating apt\n"
-sudo apt update -y
+sudo apt update -yqq
 
 printf "Upgrade apt\n"
-sudo apt upgrade -y
+sudo apt upgrade -yqq
 
 printf "Installing packages for Debian Linux\n"
-sudo apt install -y $PACKAGE_LIST
+sudo apt install -yqq $PACKAGE_LIST
 
 printf "Adding Kali package repository to apt\n"
 echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list
@@ -64,14 +64,14 @@ printf "Installing Kali signature\n"
 wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
 
 printf "Updating apt with kali and signature\n"
-sudo apt update -y
+sudo apt update -yqq
 
 # NOTE: Breaks ssh
 printf "Upgrade apt with kali and signature\n"
-sudo apt upgrade -y
+sudo apt upgrade -yqq
 
 printf "Installing Kali\n"
-sudo apt install -y kali-linux-default
+sudo apt install -yqq kali-linux-default
 
 printf "Changing shell to zsh\n"
 sudo chsh -s /usr/bin/zsh $USER
@@ -93,7 +93,7 @@ sudo systemctl enable ssh.socket
 sudo systemctl start ssh.socket
 
 printf "Installing Python2 pip and Python3 pip3\n"
-sudo apt install -y python-pip python3-pip
+sudo apt install -yqq python-pip python3-pip
 
 printf "Installing outrun\n"
 pip3 install outrun

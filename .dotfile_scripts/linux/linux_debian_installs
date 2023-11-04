@@ -8,7 +8,7 @@ printf "Updating apt\n"
 sudo apt update -y
 
 printf "Install software-properties-common\n"
-sudo apt install software-properties-common
+sudo apt install -y software-properties-common
 
 printf "Installing gnupg, gnupg1, gnupg2\n"
 sudo apt install -y gnupg 
@@ -64,7 +64,7 @@ printf "Installing Kali signature\n"
 wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
 
 printf "Updating apt with kali and signature\n"
-sudo apt update 
+sudo apt update -y
 
 # NOTE: Breaks ssh
 #printf "Upgrade apt with kali and signature\n"

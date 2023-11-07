@@ -55,6 +55,7 @@ alias path='echo -e ${PATH//:/\\n}'
 
 # --MAC ALIAS'--
 alias brewclean='brew cleanup --force -s && rm -rf $(brew --cache)'
+alias brew-new-coffee='brew update && brew upgrade && brew cleanup'
 # macOS has no `md5sum`, so use `md5` as a fallback
 command -v md5sum > /dev/null || alias md5sum="md5"
 # macOS has no `sha1sum`, so use `shasum` as a fallback

@@ -75,6 +75,8 @@ alias wifi-keychain='open -a "keychain access"'
 alias vlc='/Applications/VLC.app/Contents/MacOS/VLC'
 # Wireshark
 alias wireshark='sudo /Applications/Wireshark.app/Contents/MacOS/Wireshark'
+# Networking
+alias open-ports='lsof -Pn -i4'
 
 # Stuff I never really use but cannot delete either because of http://xkcd.com/530/
 alias stfu="osascript -e 'set volume output muted true'"

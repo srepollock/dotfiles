@@ -85,6 +85,9 @@ brew install python
 brew tap hashicorp/tap
 brew install hashicorp/tap/terraform
 
+# Cloud Dev Environments
+curl -L https://coder.com/install.sh | sh
+
 # Install font tools.
 #brew tap bramstein/webfonttools
 #brew install sfnt2woff

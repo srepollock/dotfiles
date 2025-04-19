@@ -63,6 +63,7 @@ brew install --cask stats
 brew install docker
 brew install docker-compose
 brew install docker-machine
+brew install ncdu
 
 # Password Managers
 brew install 1password-cli

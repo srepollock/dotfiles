@@ -5,6 +5,8 @@ export LC_ALL='en_US.UTF-8'
 # ---MAC FILES---
 # Add coreutils (brew install coreutils) to PATH
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
+# Add sbin to PATh
+PATH="/usr/local/sbin:$PATH"
 # Add gnubin ('g' commands) to your PATH
 PATH="/usr/local/opt/coreutils/libexec/gnubin:$PATH"
 # Add coreutils (brew install coreutils) to MANPATH

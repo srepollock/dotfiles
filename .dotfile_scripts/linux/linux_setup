@@ -8,7 +8,7 @@ directory=$(pwd)
 rsync -aqz ${directory}/starter/linux/.??* ${HOME}/
 printf "Copying script files to home\n"
 rsync -aqz ${directory}/scripts ${HOME}/
-if [[ ! -v CODESPACES ]]; then
+if [ ! -v CODESPACES ]; then
   printf "Start SSH\n"
   sudo systemctl enable ssh
 fi

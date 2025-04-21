@@ -19,5 +19,5 @@ $HOME/.local/
 $HOME/.dotnet"
 touch exclude_folders.txt
 echo $EXCLUDE > exclude_folders.txt
-rsync -aqz --progress --delete --exclude-from=./exclude_folders.txt $HOME/.??* $HOME/$backup_folder/
+rsync -aqz --progress --delete --exclude-from="./exclude_folders.txt" $HOME/.??* $HOME/$backup_folder/
 rm exclude_folders.txt

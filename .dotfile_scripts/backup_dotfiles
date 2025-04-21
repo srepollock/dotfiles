@@ -10,7 +10,11 @@ $HOME/.dotfile_scripts
 $HOME/install
 $HOME/starter
 $HOME/.Trash
-$HOME/.Trashbin"
+$HOME/.Trashbin
+$HOME/.vscode-remote
+$HOME/.docker
+$HOME/.cache
+$HOME/.dotnet"
 touch exclude_folders.txt
 echo $EXCLUDE > exclude_folders.txt
 rsync -aqz --delete --exclude-from=./exclude_folders.txt $HOME/.??* $HOME/$backup_folder/

@@ -9,11 +9,12 @@ EXCLUDE="$HOME/${backup_folder}
 $HOME/.dotfile_scripts
 $HOME/install
 $HOME/starter
-$HOME/.Trash
-$HOME/.Trashbin
-$HOME/.vscode-remote
-$HOME/.docker
-$HOME/.cache
+$HOME/.Trash/
+$HOME/.Trashbin/
+$HOME/.vscode-remote/
+$HOME/.docker/
+$HOME/.cache/
+$HOME/.local/
 $HOME/.dotnet"
 touch exclude_folders.txt
 echo $EXCLUDE > exclude_folders.txt

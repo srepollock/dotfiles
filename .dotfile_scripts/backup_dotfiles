@@ -6,6 +6,7 @@ backup_folder=.dotfiles_backup_$fdate
 mkdir $HOME/${backup_folder}
 printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
 EXCLUDE="$HOME/${backup_folder}
+$HOME/.dotfiles_backup*/
 $HOME/.dotfile_scripts
 $HOME/install
 $HOME/starter

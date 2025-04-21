@@ -9,5 +9,9 @@ EXCLUDE="$HOME/${backup_folder}
 $HOME/.dotfile_scripts
 $HOME/install
 $HOME/starter
-$HOME/.Trash"
-rsync -aqz --delete --exclude=<(printf "%s" "$EXCLUDE";) --exclude $HOME/.Trash --exclude $HOME/.Trashbin $HOME/.??* $HOME/$backup_folder/
+$HOME/.Trash
+$HOME/.Trashbin"
+touch exclude_folders.txt
+echo $EXCLUDE > exclude_folders.txt
+rsync -aqz --delete --exclude-from=./exclude_folders.txt $HOME/.??* $HOME/$backup_folder/
+rm exclude_folders.txt

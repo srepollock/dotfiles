@@ -55,7 +55,7 @@ distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
         ;;
 esac
 
-chsh -s /bin/zsh
+sudo chsh -s /bin/zsh $USER
 
 shell=${SHELL/\/bin\//.}
 case $shell in

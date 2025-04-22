@@ -3,21 +3,22 @@
 fdate=$(date +%Y_%m_%d_%H-%M)
 backup_folder=.dotfiles_backup_$fdate
 
-mkdir $HOME/${backup_folder}
-printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
-EXCLUDE="$HOME/${backup_folder}
-$HOME/.dotfiles_backup*/
-$HOME/.dotfile_scripts
-$HOME/install
-$HOME/starter
-$HOME/.Trash/
-$HOME/.Trashbin/
-$HOME/.vscode-remote/
-$HOME/.docker/
-$HOME/.cache/
-$HOME/.local/
-$HOME/.dotnet"
-touch exclude_folders.txt
+echo $backup_folder >> $HOME/exclude_folders.txt
+cat <<'EOF'>> $HOME/exclude_folders.txt
+.dotfiles_backup*/
+.dotfile_scripts
+install
+starter
+.Trash/
+.Trashbin/
+.vscode-remote/
+.docker/
+.cache/
+.local/
+.dotnet
+EOF
+
 echo $EXCLUDE > exclude_folders.txt
-rsync -aqz --progress --delete --exclude-from="./exclude_folders.txt" $HOME/.??* $HOME/$backup_folder/
+printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
+rsync -ahvz --progress --exclude-from="$HOME/exclude_folders.txt" --include=".[^.]*" $HOME/ $HOME/$backup_folder/
 rm exclude_folders.txt

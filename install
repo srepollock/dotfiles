@@ -14,8 +14,8 @@ fi
 os=${OSTYPE//[0-9.-]*/}
 case "$os" in
     darwin)
-        ./.dotfile_scripts/macos/macos_install
         ./.dotfile_scripts/backup_dotfiles
+        ./.dotfile_scripts/macos/macos_install
         ./.dotfile_scripts/macos/macos_setup
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)
@@ -27,9 +27,10 @@ case "$os" in
         ;;
     linux)
 distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
+        ./.dotfile_scripts/backup_dotfiles
         case $distro in
             debian)
-                ./.dotfile_scripts/linux/linux_debian_installs        
+                ./.dotfile_scripts/linux/linux_debian_installs
                 ;;
             ubuntu)
                 ./.dotfile_scripts/linux/linux_debian_installs
@@ -42,7 +43,6 @@ distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
                 exit 1
                 ;;
         esac
-        ./.dotfile_scripts/backup_dotfiles
         ./.dotfile_scripts/linux/linux_setup
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)

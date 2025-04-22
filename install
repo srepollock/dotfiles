@@ -1,14 +1,14 @@
 #!/bin/bash
 
 printf "Generating Default Directories\n"
-if [ ! -d ~/Documents ]; then
-   mkdir ~/Documents
+if [ ! -d ~/documents ]; then
+    mkdir ~/documents
 fi
-if [ ! -d ~/Downloads ]; then
-    mkdir ~/Downloads
+if [ ! -d ~/downloads ]; then
+    mkdir ~/downloads
 fi
-if [ ! -d ~/Downloads ]; then
-    mkdir ~/Media
+if [ ! -d ~/media ]; then
+    mkdir ~/media
 fi
 
 os=${OSTYPE//[0-9.-]*/}

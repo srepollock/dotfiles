@@ -88,7 +88,7 @@
     "typescript.updateImportsOnFileMove.enabled": "always",
     "editor.multiCursorModifier": "alt",
     "editor.fontWeight": "600",
-    "workbench.colorTheme": "Solarized Dark+",
+    "workbench.colorTheme": "Solarized Dark",
     "gitlens.views.fileHistory.enabled": true,
     "gitlens.views.lineHistory.enabled": true,
     "terminal.integrated.rendererType": "dom",
@@ -133,7 +133,7 @@
     "omnisharp.useGlobalMono": "always",
     "editor.inlineSuggest.enabled": true,
     "github.copilot.enable": {
-        "*": true,
+        "*": false,
         "plaintext": false,
         "markdown": true,
         "scminput": false,
@@ -198,7 +198,7 @@
     },
     "ansible.validation.lint.enabled": false,
     "[typescriptreact]": {
-        "editor.defaultFormatter": "esbenp.prettier-vscode"
+        "editor.defaultFormatter": "vscode.typescript-language-features"
     },
     "[typescript]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
@@ -206,6 +206,7 @@
     "[scss]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
+    "editor.fontSize": 16,
     "settingsSync.ignoredSettings": ["editor.fontSize"],
     "yaml.customTags": [
         "!And",
@@ -240,8 +241,7 @@
     "[markdown]": {
         "editor.defaultFormatter": "esbenp.prettier-vscode"
     },
-    "window.zoomLevel": -1,
-    "snyk.advanced.cliPath": "C:\\Users\\spwn\\AppData\\Local\\snyk-ls\\snyk-win.exe",
+    "snyk.advanced.cliPath": "/Users/srepollock/Library/Application Support/snyk-ls/snyk-macos",
     "snyk.trustedFolders": [
         "/Users/srepollock/Documents/projects/obsidian-rhythm-ii",
         "w:\\Projects\\obsidian_rhythm_ii",
@@ -250,7 +250,6 @@
     "snyk.yesWelcomeNotification": false,
     "remote.autoForwardPortsSource": "hybrid",
     "task.allowAutomaticTasks": "on",
-    "cloudcode.duetAI.project": "obsidian-rhythm-ii",
     "extensions.ignoreRecommendations": true,
     "remote.SSH.remotePlatform": {
         "coder-vscode--srepollock--example": "linux"
@@ -258,5 +257,58 @@
     "glassit.alpha": 220,
     "editor.stickyScroll.enabled": true,
     "cloudcode.project": "obsidian-rhythm-ii-development",
-    "diffEditor.ignoreTrimWhitespace": false
+    "diffEditor.ignoreTrimWhitespace": false,
+    "snyk.folderConfigs": [
+        {
+            "folderPath": "",
+            "baseBranch": ""
+        }
+    ],
+    "diffEditor.renderSideBySide": true,
+    "geminicodeassist.project": "obsidian-rhythm-ii",
+    "diffEditor.codeLens": true,
+    "workbench.secondarySideBar.showLabels": false,
+    "chat.commandCenter.enabled": true,
+    "github.copilot.chat.codesearch.enabled": true,
+    "github.copilot.chat.agent.thinkingTool": true,
+    "docker.extension.enableComposeLanguageServer": false,
+    "chat.instructionsFilesLocations": {
+        ".github/instructions": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-http-request-post-response.instructions.md": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-http-request-pre-request.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-http-request-post-response.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-http-request-pre-request.instructions.md": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-collections-post-response.instructions.md": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-collections-pre-request.instructions.md": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-folder-post-response.instructions.md": true,
+        "C:\\Users\\spwn\\AppData\\Local\\Temp\\postman-folder-pre-request.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-collections-post-response.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-collections-pre-request.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-folder-post-response.instructions.md": true,
+        "/var/folders/f3/q9fnlj656d1gv24_nwtdwp0h0000gn/T/postman-folder-pre-request.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-collections-post-response.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-collections-pre-request.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-folder-post-response.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-folder-pre-request.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-http-request-post-response.instructions.md": true,
+        "C:\\Users\\Spencer\\AppData\\Local\\Temp\\postman-http-request-pre-request.instructions.md": true
+    },
+    "[dockercompose]": {
+        "editor.insertSpaces": true,
+        "editor.tabSize": 2,
+        "editor.autoIndent": "advanced",
+        "editor.quickSuggestions": {
+            "other": true,
+            "comments": false,
+            "strings": true
+        },
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "[github-actions-workflow]": {
+        "editor.defaultFormatter": "redhat.vscode-yaml"
+    },
+    "security.allowedUNCHosts": ["wsl.localhost"],
+    "gitlens.ai.model": "vscode",
+    "gitlens.ai.vscode.model": "copilot:gpt-4.1",
+    "http.systemCertificatesNode": true
 }

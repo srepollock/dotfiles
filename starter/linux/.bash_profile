@@ -4,4 +4,6 @@
 PATH="/Library/Frameworks/Python.framework/Versions/3.4/bin:${PATH}"
 export PATH
 
+export PATH="$HOME/.local/bin:$PATH"
+
 source /usr/local/lib/dnx/bin/dnvm.sh

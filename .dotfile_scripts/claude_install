@@ -1,0 +1,113 @@
+#!/bin/bash
+# claude_install — Sets up Claude Code and Claude Desktop configurations
+# Called from the main install script
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+CLAUDE_SRC="$SCRIPT_DIR/.claude"
+CLAUDE_DEST="$HOME/.claude"
+
+os=${OSTYPE//[0-9.-]*/}
+
+printf "\n=== Claude Configuration Setup ===\n\n"
+
+# ─────────────────────────────────────────────
+# Claude Code — ~/.claude/
+# Using cp instead of symlinks due to known bugs:
+#   - https://github.com/anthropics/claude-code/issues/3575
+#   - https://github.com/anthropics/claude-code/issues/764
+# ─────────────────────────────────────────────
+
+printf "Setting up Claude Code configs...\n"
+
+# Create directory structure
+mkdir -p "$CLAUDE_DEST"/{commands,skills,agents,rules,output-styles}
+
+# Copy global instruction file
+if [ -f "$CLAUDE_SRC/CLAUDE.md" ]; then
+    cp "$CLAUDE_SRC/CLAUDE.md" "$CLAUDE_DEST/CLAUDE.md"
+    printf "  ✓ CLAUDE.md\n"
+fi
+
+# Copy settings (never overwrite settings.local.json)
+if [ -f "$CLAUDE_SRC/settings.json" ]; then
+    cp "$CLAUDE_SRC/settings.json" "$CLAUDE_DEST/settings.json"
+    printf "  ✓ settings.json\n"
+fi
+
+# Copy skills
+if [ -d "$CLAUDE_SRC/skills" ]; then
+    cp -r "$CLAUDE_SRC/skills/"* "$CLAUDE_DEST/skills/" 2>/dev/null || true
+    skill_count=$(find "$CLAUDE_SRC/skills" -name "SKILL.md" | wc -l | tr -d ' ')
+    printf "  ✓ skills/ (%s skills)\n" "$skill_count"
+fi
+
+# Copy commands
+if [ -d "$CLAUDE_SRC/commands" ] && [ "$(ls -A "$CLAUDE_SRC/commands" 2>/dev/null)" ]; then
+    cp "$CLAUDE_SRC/commands/"* "$CLAUDE_DEST/commands/" 2>/dev/null || true
+    cmd_count=$(find "$CLAUDE_SRC/commands" -name "*.md" | wc -l | tr -d ' ')
+    printf "  ✓ commands/ (%s commands)\n" "$cmd_count"
+fi
+
+# Copy agents
+if [ -d "$CLAUDE_SRC/agents" ] && [ "$(ls -A "$CLAUDE_SRC/agents" 2>/dev/null)" ]; then
+    cp "$CLAUDE_SRC/agents/"* "$CLAUDE_DEST/agents/" 2>/dev/null || true
+    printf "  ✓ agents/\n"
+fi
+
+# Copy rules
+if [ -d "$CLAUDE_SRC/rules" ] && [ "$(ls -A "$CLAUDE_SRC/rules" 2>/dev/null)" ]; then
+    cp "$CLAUDE_SRC/rules/"* "$CLAUDE_DEST/rules/" 2>/dev/null || true
+    printf "  ✓ rules/\n"
+fi
+
+# ─────────────────────────────────────────────
+# Claude Desktop — platform-specific path
+# ─────────────────────────────────────────────
+
+DESKTOP_SRC="$SCRIPT_DIR/claude-desktop"
+
+case "$os" in
+    darwin)
+        DESKTOP_DEST="$HOME/Library/Application Support/Claude"
+        DESKTOP_CONFIG="claude_desktop_config.macos.json"
+        ;;
+    linux)
+        DESKTOP_DEST="$HOME/.config/Claude"
+        DESKTOP_CONFIG="claude_desktop_config.linux.json"
+        ;;
+    *)
+        printf "  ⚠ Claude Desktop: unsupported OS (%s), skipping\n" "$os"
+        DESKTOP_DEST=""
+        ;;
+esac
+
+if [ -n "${DESKTOP_DEST:-}" ] && [ -f "$DESKTOP_SRC/$DESKTOP_CONFIG" ]; then
+    mkdir -p "$DESKTOP_DEST"
+    cp "$DESKTOP_SRC/$DESKTOP_CONFIG" "$DESKTOP_DEST/claude_desktop_config.json"
+    printf "  ✓ Claude Desktop config → %s\n" "$DESKTOP_DEST"
+fi
+
+# ─────────────────────────────────────────────
+# Credential protection (Linux/WSL only)
+# ─────────────────────────────────────────────
+
+if [ "$os" = "linux" ] && [ -f "$CLAUDE_DEST/.credentials.json" ]; then
+    chmod 600 "$CLAUDE_DEST/.credentials.json"
+    printf "  ✓ Secured .credentials.json (mode 600)\n"
+fi
+
+# ─────────────────────────────────────────────
+# Verification
+# ─────────────────────────────────────────────
+
+printf "\n"
+if command -v claude &>/dev/null; then
+    printf "Claude Code version: %s\n" "$(claude --version 2>/dev/null || echo 'unknown')"
+else
+    printf "⚠ Claude Code CLI not found. Install with: npm install -g @anthropic-ai/claude-code\n"
+fi
+
+printf "\n=== Claude setup complete ===\n"
+printf "Remember: MCP server secrets should be set as environment variables in your shell profile.\n"
+printf "  Example: export GOOGLE_STITCH_API_KEY=\"your-key-here\"\n\n"

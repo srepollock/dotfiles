@@ -1,7 +1,40 @@
 .dotfile_backup
 .swp
 *.log*
-*.log
 .DS_Store
 .venv
 *.env
+.env.*
+.mcp-secrets.env
+
+# ─────────────────────────────────────────────
+# Claude Code — sensitive files to exclude
+# ─────────────────────────────────────────────
+
+# OAuth tokens and credentials
+.claude/.credentials.json
+
+# Machine-specific settings (may contain leaked API keys per issue #13106)
+.claude/settings.local.json
+
+# Session history and auto-memory
+.claude/projects/
+.claude/statsig/
+.claude/plans/
+.claude/plugins/
+.claude/cache/
+.claude/backups/
+.claude/file-history/
+.claude/shell-snapshots/
+.claude/session-env/
+.claude/clipboard/
+.claude/paste-cache/
+.claude/*.log
+
+# App state file (OAuth tokens, MCP keys, conversation refs)
+# NOTE: This lives at ~/.claude.json (outside .claude/ dir) —
+# not relevant in the dotfiles repo but noted for awareness
+# .claude.json
+
+# Local project overrides
+CLAUDE.local.md

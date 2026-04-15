@@ -1,0 +1,95 @@
+{
+  "$schema": "https://json.schemastore.org/claude-code-settings.json",
+  "permissions": {
+    "allow": [
+      "Read",
+      "Glob",
+      "Grep",
+      "Bash(git status)",
+      "Bash(git log:*)",
+      "Bash(git diff:*)",
+      "Bash(git branch:*)",
+      "Bash(git show:*)",
+      "Bash(git stash:*)",
+      "Bash(npm test)",
+      "Bash(npm run lint:*)",
+      "Bash(bun test:*)",
+      "Bash(bun run lint:*)",
+      "Bash(pytest:*)",
+      "Bash(npx prettier:*)",
+      "Bash(npx eslint:*)",
+      "Bash(cat:*)",
+      "Bash(head:*)",
+      "Bash(tail:*)",
+      "Bash(wc:*)",
+      "Bash(find:*)",
+      "Bash(ls:*)",
+      "Bash(pwd)",
+      "Bash(which:*)",
+      "Bash(echo:*)"
+    ],
+    "deny": [
+      "Read(.env)",
+      "Read(.env.*)",
+      "Read(.env.local)",
+      "Read(~/.ssh/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/.claude/settings.local.json)",
+      "Edit(.env)",
+      "Edit(.env.*)",
+      "Write(.env)",
+      "Write(.env.*)"
+    ]
+  },
+  "env": {
+    "EDITOR": "code --wait"
+  },
+  "hooks": {
+    "PostToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // empty') && [ -n \"$file\" ] && npx prettier --write \"$file\" 2>/dev/null || true",
+            "timeout": 30,
+            "statusMessage": "Auto-formatting..."
+          }
+        ]
+      }
+    ],
+    "PreToolUse": [
+      {
+        "matcher": "Edit|Write",
+        "hooks": [
+          {
+            "type": "command",
+            "command": "file=$(jq -r '.tool_input.file_path // empty') && case \"$file\" in .env|.env.*) echo 'Blocked: cannot modify environment files' >&2; exit 2;; esac",
+            "timeout": 5
+          }
+        ]
+      }
+    ],
+    "Notification": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "if command -v osascript &>/dev/null; then osascript -e 'display notification \"Claude needs attention\" with title \"Claude Code\"'; elif command -v notify-send &>/dev/null; then notify-send 'Claude Code' 'Needs attention'; fi",
+            "timeout": 10
+          }
+        ]
+      }
+    ],
+    "SessionStart": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "echo 'Reminder: use conventional commits. Prefer bun over npm. /compact before stepping away.'"
+          }
+        ]
+      }
+    ]
+  }
+}

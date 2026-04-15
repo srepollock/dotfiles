@@ -1,0 +1,19 @@
+{
+  "mcpServers": {
+    "google-stitch": {
+      "command": "npx",
+      "args": ["-y", "@_davideast/stitch-mcp", "proxy"],
+      "env": {
+        "GOOGLE_STITCH_API_KEY": ""
+      }
+    },
+    "filesystem": {
+      "command": "npx",
+      "args": [
+        "-y",
+        "@modelcontextprotocol/server-filesystem",
+        "/Users"
+      ]
+    }
+  }
+}

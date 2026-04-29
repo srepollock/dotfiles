@@ -1,15 +1,26 @@
 #!/bin/bash
-# Tribunal Tester Utility
+# Universal Tribunal Tester Utility
 
-echo "🧪 [Tester] Initializing dry-run..."
+echo "🧪 [Tester] Detecting environment..."
 
-# Detect language and run basic check
 if [ -f "package.json" ]; then
-    echo "📦 Node.js project detected. Running type-check..."
-    npm run type-check || echo "⚠️ Type-check failed or script missing."
-elif [ -f "requirements.txt" ]; then
-    echo "🐍 Python project detected. Running lint check..."
-    flake8 . || echo "⚠️ Flake8 check failed or not installed."
+    echo "📦 Node.js/Bun detected."
+    [ -f "bun.lockb" ] && bun test || npm test
+elif [ -f "requirements.txt" ] || [ -f "pyproject.toml" ]; then
+    echo "🐍 Python detected. Running pytest..."
+    pytest || python -m unittest
+elif [ -f "go.mod" ]; then
+    echo "🐹 Go detected. Running tests..."
+    go test ./...
+elif [ -f "Cargo.toml" ]; then
+    echo "🦀 Rust detected. Running cargo test..."
+    cargo test
+elif [ -f "Makefile" ]; then
+    echo "🛠️ Makefile found. Running 'make test'..."
+    make test
+else
+    echo "❓ No standard test runner detected. Please run tests manually."
+    exit 1
 fi
 
-echo "✅ [Tester] Environment scan complete."
+echo "✅ [Tester] Execution complete."

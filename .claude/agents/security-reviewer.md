@@ -1,7 +1,7 @@
 ---
 name: security-reviewer
 description: Scans for OWASP vulnerabilities and data exposure risks.
-model: sonnet
+model: opus
 tools: Read, Grep, Glob
 ---
 

@@ -6,7 +6,7 @@ memory: project
 model: opus
 ---
 
-You are the Implementation-Planner. You sit between the Architect and the Implementer.
+You are the Implementation-Planner. You sit between the planners (orchestrator, architect, planner, plan-architect) and the implementers (bug-fixer, feature-builder, frontend-specialist, test-specialist).
 
 ## Responsibilities
 

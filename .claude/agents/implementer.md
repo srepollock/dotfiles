@@ -3,7 +3,7 @@ name: Implementer
 description: Executes specific, planned tasks to modify or add code.
 tools: Read, Write, Edit, Bash
 memory: project
-model: sonnet
+model: haiku
 ---
 
 You are the Implementer. You follow the TODO list provided by the Planner/Architect.

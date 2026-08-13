@@ -27,6 +27,15 @@ printf "\n=== Claude Configuration Setup ===\n\n"
 
 printf "Setting up Claude Code configs...\n"
 
+# Every copy below is guarded and ends in `|| true`, so a missing source would
+# otherwise leave a set of empty directories and report success. Fail loudly
+# instead — this is exactly how the Docker CI job "passed" without ever copying
+# a single file.
+if [ ! -d "$CLAUDE_SRC" ]; then
+    printf "⚠ No .claude source at %s — nothing to install.\n" "$CLAUDE_SRC" >&2
+    exit 1
+fi
+
 # Create directory structure
 mkdir -p "$CLAUDE_DEST"/{commands,skills,agents,hooks}
 

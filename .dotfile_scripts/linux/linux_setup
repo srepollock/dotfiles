@@ -1,15 +1,16 @@
 #!/bin/sh
+set -eu
 
 # Codespaces should not start an SSH server as systemd is not installed
-if [ -z "${CODESPACES}" ]; then
+if [ -z "${CODESPACES:-}" ]; then
   printf "Setting sshd to start on computer boot\n"
   line="@reboot /etc/init.d/sshd start" # /etc/init.d/ssh start # for CentOS/RHEL/Fedora Linux
-  echo "$line" >> /etc/crontab
+  echo "$line" | sudo tee -a /etc/crontab >/dev/null || true
   printf "Copying dotfiles to home for Linux\n"
   directory=$(pwd)
   rsync -aqz ${directory}/starter/linux/.??* ${HOME}/
   printf "Copying script files to home\n"
   rsync -aqz ${directory}/scripts ${HOME}/
   printf "Start SSH\n"
-  sudo systemctl enable ssh
+  sudo systemctl enable ssh || true
 fi

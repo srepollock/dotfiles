@@ -14,3 +14,10 @@ jobs:
 
       - name: Build image
         run: docker build . --file Dockerfile --tag srepollock/dotfiles
+
+      - name: Smoke test installed environment
+        run: |
+          docker run --rm --entrypoint /bin/bash srepollock/dotfiles -lc '
+            command -v zsh rsync git >/dev/null || { echo "core tools missing"; exit 1; }
+            test -f "$HOME/.zshrc" && grep -q "agnoster" "$HOME/.zshrc" || { echo "dotfiles not installed"; exit 1; }
+          '

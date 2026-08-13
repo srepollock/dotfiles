@@ -1,4 +1,5 @@
 #!/bin/sh
+set -eu
 
 printf "Copying dotfiles to home for macOS\n"
 #rsync -avq --progress ../starter/macos/ ~/
@@ -10,8 +11,8 @@ rsync -aqz ${directory}/scripts ${HOME}/
 
 # Install the Solarized Dark theme for iTerm
 printf "Install iTerm Theme\n"
-open "${HOME}/preferences/SpencerSolarized.itermcolors"
+open "${HOME}/preferences/SpencerSolarized.itermcolors" || true
 
 # Install VSCode settings
-cp "${HOME}/preferences/vscode-settings.json" "${HOME}/Library/Application Support/Code/User/"
-mv "${HOME}/Library/Application Support/Code/User/vscode-settings.json" "${HOME}/Library/Application Support/Code/User/settings.json"
+cp "${HOME}/preferences/vscode-settings.json" "${HOME}/Library/Application Support/Code/User/" || true
+mv "${HOME}/Library/Application Support/Code/User/vscode-settings.json" "${HOME}/Library/Application Support/Code/User/settings.json" || true

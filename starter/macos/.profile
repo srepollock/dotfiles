@@ -99,4 +99,17 @@ alias connect-home="open smb://spwn@APOLLO/"
 # Python thread safety in macOS resolution
 export OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES
 
+# Dotfiles
+export DOTFILES_DIR="${HOME}/documents/projects/dotfiles"
+
+# Manual Claude Code config sync: claude_sync [status|push|pull]
+# Deliberately manual — nothing syncs ~/.claude on a timer or a hook.
+claude_sync() {
+    if [ ! -x "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" ]; then
+        printf 'claude_sync: not found at %s\n' "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" >&2
+        return 1
+    fi
+    "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" "$@"
+}
+
 export PATH

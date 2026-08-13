@@ -4,8 +4,8 @@ description: >
   Use this skill to ship local branch changes end-to-end: commit uncommitted work,
   create a GitHub issue from the diff against the target branch, create a properly named
   `feat/<issue-number>` or `fix/<issue-number>` branch, push it, create a PR that
-  targets the base branch and closes the issue, and (optionally) add both the issue and
-  PR to a GitHub project board.
+  targets the base branch and closes the issue, and add both the issue and PR to the
+  GitHub project board.
   Trigger on: "ship changes", "create issue and pr", "issue and pr", "ship it",
   "package changes", "ship my work", "prep for review", "open issue and pr",
   "send changes", "push and pr".
@@ -20,37 +20,22 @@ Automates the full workflow from local changes to a reviewable PR against a targ
 3. Create a GitHub issue describing the work
 4. Create a `feat/<#>` or `fix/<#>` branch with the changes
 5. Push the branch and open a PR that closes the issue
-6. Optionally add both the issue and PR to a GitHub project board
-
-This skill is **project-agnostic**. All repo-specific values are auto-detected from the local `git` and `gh` state where possible, and prompted for otherwise. Nothing is hard-coded to a specific repository.
+6. Add both the issue and PR to the GitHub project board
 
 ---
 
-## Step 0 — Resolve Repository Context
+## Configuration
 
-Auto-detect the values needed for later steps. Run these in parallel:
+Before using this skill, configure these constants for your repository:
 
-```bash
-# Repo owner/name from the origin remote
-gh repo view --json owner,name,defaultBranchRef --jq '{owner: .owner.login, name: .name, default: .defaultBranchRef.name}'
+| Key | Value | Example |
+|-----|-------|---------|
+| `REPO_OWNER` | Your GitHub username | `srepollock` |
+| `REPO_NAME` | Repository name | `my-project` |
+| `TARGET_BRANCH` | Base branch for PRs | `development`, `main` |
+| `PROJECT_NUMBER` | GitHub Project number | `2` |
 
-# Current branch
-git rev-parse --abbrev-ref HEAD
-
-# List of GitHub projects the user/org owns (for optional board attachment)
-gh project list --owner "@me" --format json 2>/dev/null || true
-```
-
-From the output, set the following context variables for the rest of the workflow:
-
-| Key | How to resolve |
-|-----|---------------|
-| `REPO_OWNER` | From `gh repo view` (`.owner.login`) |
-| `REPO_NAME` | From `gh repo view` (`.name`) |
-| `TARGET_BRANCH` | Default branch from `gh repo view` (`.defaultBranchRef.name`). Common values: `main`, `trunk`, `master`, `development`. If a project-level `CLAUDE.md` specifies a different target, prefer that. Ask the user to confirm if uncertain. |
-| `PROJECT_NUMBER` | Optional. If `gh project list` returns exactly one project, suggest it. If it returns multiple, ask the user to pick or skip. If it returns none (or errors due to missing scope), skip the project board steps entirely. |
-
-If `gh` is not authenticated or any auto-detection fails, ask the user to provide the missing values directly. Do not invent defaults.
+Replace these placeholders throughout the workflow with your actual values.
 
 ---
 
@@ -65,7 +50,7 @@ git status --porcelain
 If there is output (uncommitted work exists):
 
 1. Stage all relevant changes (`git add` specific files — avoid secrets like `.env`).
-2. Create a commit using **conventional commit** format (`feat:`, `fix:`, `chore:`, `docs:`, `refactor:`, `test:`).
+2. Create a commit with a descriptive message summarising the work.
 3. Confirm the working tree is now clean.
 
 If the tree is already clean, skip to Step 2.
@@ -75,20 +60,18 @@ If the tree is already clean, skip to Step 2.
 ## Step 2 — Fetch Latest and Diff Against Target Branch
 
 ```bash
-git fetch origin "$TARGET_BRANCH"
+git fetch origin $TARGET_BRANCH
 ```
 
 Generate the full diff and a stat summary:
 
 ```bash
-git diff "origin/$TARGET_BRANCH"...HEAD --stat
-git diff "origin/$TARGET_BRANCH"...HEAD
-git log "origin/$TARGET_BRANCH"...HEAD --oneline
+git diff origin/$TARGET_BRANCH...HEAD --stat
+git diff origin/$TARGET_BRANCH...HEAD
+git log origin/$TARGET_BRANCH...HEAD --oneline
 ```
 
-If the diff is empty, abort and tell the user there are no changes to ship.
-
-Use these outputs to understand **what changed** and **why**. This analysis drives the issue title, description, labels, and PR content in later steps.
+Use these to understand **what changed** and **why**. This analysis drives the issue title, description, labels, and PR content in later steps.
 
 ---
 
@@ -98,47 +81,48 @@ Analyse the diff, commit messages, and current branch name to infer whether this
 
 **Inference heuristics (in priority order):**
 
-1. Commit message prefixes: `feat:` / `fix:` / `bugfix:` / `hotfix:` etc.
+1. Commit message prefixes: `feat:` / `fix:` / `bugfix:` etc.
 2. Current branch name pattern: `feat/*`, `fix/*`, `hotfix/*`
-3. Nature of the changes: new files/endpoints/capabilities = feature; patching existing logic = fix
+3. Nature of the changes: new files/endpoints = feature; patching existing logic = fix
 
-Present the inferred type and ask the user to confirm or override:
+Present the inferred type to the user and ask for confirmation:
 
 > Based on the changes, this looks like a **feature** (or **fix**). Is that correct?
+
+Allow the user to override.
 
 ---
 
 ## Step 4 — Fetch Labels and Milestones from GitHub
 
-Always refresh labels and milestones from the actual repo before applying. Run both in parallel:
+Always refresh labels and milestones before applying. Run both in parallel:
 
 ```bash
-gh label list --repo "$REPO_OWNER/$REPO_NAME" --limit 100 --json name,description
-gh api "repos/$REPO_OWNER/$REPO_NAME/milestones" --jq '.[] | {number: .number, title: .title}'
+gh label list --repo $REPO_OWNER/$REPO_NAME --limit 100 --json name,description
+gh api repos/$REPO_OWNER/$REPO_NAME/milestones --jq '.[] | {number: .number, title: .title}'
 ```
 
-Select the most appropriate labels based on the change type and affected areas (e.g. a `fix` change typically gets `bug`; a `feat` typically gets `enhancement` or a feature-area label that exists in the repo). **Only use labels that actually exist** in the repo — do not invent new ones.
+Select the most appropriate labels based on the change type and affected areas. Present the selected labels **and** a milestone picker to the user for confirmation:
 
-If milestones exist, present them as a picker. If none exist, skip the milestone prompt entirely.
-
-> Labels: `<label1>`, `<label2>`
+> Labels: `bug`, `enhancement`
 > Milestone: which milestone applies?
->   1. <milestone title>
->   2. <milestone title>
->   …
+>   1. Alpha
+>   2. Beta
+>   3. Release
+>   4. Post Release
 >   (or press Enter to skip)
 
-Capture the chosen milestone title (if any) — it will be applied to both the issue and the PR.
+Capture the chosen milestone title — it will be applied to both the issue and the PR.
 
 ---
 
 ## Step 5 — Search for an Existing Issue
 
-Derive 2–5 keywords from the diff and commit messages (e.g. `retry logic`, `auth middleware`).
+Derive 2–5 feature keywords from the diff and commit messages (e.g. `ship changes skill`, `retry logic`).
 
 ```bash
 gh issue list \
-  --repo "$REPO_OWNER/$REPO_NAME" \
+  --repo $REPO_OWNER/$REPO_NAME \
   --search "is:open <feature keywords>" \
   --limit 10 \
   --json number,title,url
@@ -175,6 +159,9 @@ Build the issue body from the diff analysis.
 
 ## Technical Notes
 [Relevant files, architectural considerations, or dependencies]
+
+## Priority
+[Optional: priority level or category]
 ```
 
 **For a bug fix:**
@@ -191,13 +178,16 @@ Build the issue body from the diff analysis.
 ## Verification
 - [ ] Fix verified locally
 - [ ] Tests added/updated
+
+## Priority
+[Optional: priority level or category]
 ```
 
 Create the issue, including the milestone if one was selected in Step 4:
 
 ```bash
 gh issue create \
-  --repo "$REPO_OWNER/$REPO_NAME" \
+  --repo $REPO_OWNER/$REPO_NAME \
   --title "<concise imperative title>" \
   --body "$(cat <<'EOF'
 <issue body here>
@@ -209,31 +199,21 @@ EOF
 
 Capture the issue number from the output URL (e.g., `https://github.com/.../issues/NNN` -> `NNN`).
 
-If an **existing issue** was selected in Step 5 and the user picked a milestone that the issue does not yet have, apply it now:
+If an **existing issue** was selected in Step 5 and it has no milestone set, apply the chosen milestone now:
 
 ```bash
-gh issue edit <NNN> --repo "$REPO_OWNER/$REPO_NAME" --milestone "<milestone title>"
+gh issue edit <NNN> --repo $REPO_OWNER/$REPO_NAME --milestone "<milestone title>"
 ```
 
 ---
 
-## Step 7 — Add the Issue to the GitHub Project (Optional)
-
-Skip this step if no `PROJECT_NUMBER` was resolved in Step 0.
+## Step 7 — Add the Issue to the GitHub Project
 
 ```bash
-gh project item-add "$PROJECT_NUMBER" \
-  --owner "$REPO_OWNER" \
-  --url "https://github.com/$REPO_OWNER/$REPO_NAME/issues/<NNN>"
+gh project item-add $PROJECT_NUMBER --owner $REPO_OWNER --url https://github.com/$REPO_OWNER/$REPO_NAME/issues/<NNN>
 ```
 
-If this fails with a scope error, prompt the user to run:
-
-```bash
-gh auth refresh -s read:project,project
-```
-
-…and then retry. If they decline, continue without the project board.
+Confirm the issue was added to the project board.
 
 ---
 
@@ -243,17 +223,15 @@ Using the issue number and inferred type from Step 3:
 
 ```bash
 # Create the new branch from the current HEAD
-git checkout -b "<type>/<issue-number>"
+git checkout -b <type>/<issue-number>
 
 # Push and set upstream
-git push -u origin "<type>/<issue-number>"
+git push -u origin <type>/<issue-number>
 ```
 
-Where `<type>` is `feat` or `fix` and `<issue-number>` is the number from Step 5/6.
+Where `<type>` is `feat` or `fix` and `<issue-number>` is the number from Step 5.
 
 **Note:** All commits from the current branch carry over since the new branch is created from HEAD.
-
-If the branch already exists locally or remotely, ask the user whether to use an alternative name or reset. Do **not** force-push without explicit confirmation.
 
 ---
 
@@ -273,8 +251,6 @@ Build the PR body from the diff analysis. Include an auto-generated **manual tes
 | Docker/infra | `[ ] Verify containers build and start cleanly` |
 | Auth/security | `[ ] Verify authentication flow end-to-end` |
 | Dependencies | `[ ] Verify no breaking changes from dependency updates` |
-| CLI / scripts | `[ ] Run the command locally and verify expected output` |
-| Docs / skills | `[ ] Render the doc / invoke the skill and verify behavior` |
 
 Always include:
 - `[ ] Smoke test passes locally`
@@ -282,9 +258,9 @@ Always include:
 
 ```bash
 gh pr create \
-  --repo "$REPO_OWNER/$REPO_NAME" \
-  --base "$TARGET_BRANCH" \
-  --head "<type>/<issue-number>" \
+  --repo $REPO_OWNER/$REPO_NAME \
+  --base $TARGET_BRANCH \
+  --head <type>/<issue-number> \
   --title "<PR title>" \
   --milestone "<milestone title>" \
   --body "$(cat <<'EOF'
@@ -314,14 +290,10 @@ Omit `--milestone` if the user skipped milestone selection in Step 4.
 
 ---
 
-## Step 10 — Add the PR to the GitHub Project (Optional)
-
-Skip this step if no `PROJECT_NUMBER` was resolved in Step 0.
+## Step 10 — Add the PR to the GitHub Project
 
 ```bash
-gh project item-add "$PROJECT_NUMBER" \
-  --owner "$REPO_OWNER" \
-  --url "https://github.com/$REPO_OWNER/$REPO_NAME/pull/<PR-number>"
+gh project item-add $PROJECT_NUMBER --owner $REPO_OWNER --url https://github.com/$REPO_OWNER/$REPO_NAME/pull/<PR-number>
 ```
 
 Capture the PR number from the `gh pr create` output URL.
@@ -335,19 +307,16 @@ Present a summary to the user:
 ```
 Ship complete!
 
-  Repo:   <REPO_OWNER>/<REPO_NAME>
-  Base:   <TARGET_BRANCH>
-
   Issue:  #<NNN> — <title>
-          https://github.com/<REPO_OWNER>/<REPO_NAME>/issues/<NNN>
+          https://github.com/$REPO_OWNER/$REPO_NAME/issues/<NNN>
 
   Branch: <type>/<NNN>
 
   PR:     #<PR-number> — <title>
-          https://github.com/<REPO_OWNER>/<REPO_NAME>/pull/<PR-number>
+          https://github.com/$REPO_OWNER/$REPO_NAME/pull/<PR-number>
 
   Milestone: <milestone title or "none">
-  Project:   <Added to project #PROJECT_NUMBER | "skipped">
+  Project:   Added to project #$PROJECT_NUMBER
 
   Next steps:
   - Request reviewers on the PR if needed
@@ -357,17 +326,18 @@ Ship complete!
 
 ## Error Handling
 
-- **Missing `gh` scopes for projects** → prompt user to run `gh auth refresh -s read:project,project`, then retry. If declined, skip project board steps and continue.
-- **Branch already exists** → ask the user for an alternative name or whether to delete the existing branch first. Never force-push without confirmation.
-- **Empty diff vs target branch** → abort with a clear message; there is nothing to ship.
-- **Auto-detection failed in Step 0** → ask the user for the missing value rather than guessing.
-- **No labels/milestones in the repo** → skip those prompts; do not invent values.
+- If `gh` commands fail due to missing scopes, prompt the user to run:
+  ```bash
+  gh auth refresh -s read:project,project
+  ```
+- If the branch name already exists, ask the user whether to force-update or pick an alternative name.
+- If the diff against `$TARGET_BRANCH` is empty, abort and inform the user there are no changes to ship.
 
 ---
 
 ## Usage Tips
 
-- **Target branch override**: If the repo's default branch isn't the PR base you want (e.g., default is `main` but you ship to `development`), check the project's `CLAUDE.md` or ask the user before defaulting to the GitHub default branch.
-- **Project board opt-out**: If the user doesn't use GitHub Projects, skip Steps 7 and 10 entirely — the rest of the workflow stands alone.
-- **Custom labels**: Always pull labels live from the repo; never assume `bug`/`enhancement` exist.
-- **Test checklists**: Extend the heuristics table in Step 9 with project-specific items in that project's local `CLAUDE.md` if the defaults aren't enough.
+- **Multi-repository workflow**: If you use this skill across different repos, create a small config file or prompt the user for `REPO_OWNER`, `REPO_NAME`, `TARGET_BRANCH`, and `PROJECT_NUMBER` at the start of the workflow.
+- **Custom labels**: Adjust the label suggestions in Step 4 based on your repository's labeling conventions.
+- **Milestone strategy**: Skip milestone selection if your repo doesn't use GitHub Milestones.
+- **Test checklists**: Expand the test checklist heuristics table in Step 9 based on your specific project's testing needs.

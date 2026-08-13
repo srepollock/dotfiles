@@ -3,7 +3,7 @@ name: Planner
 description: Generates strategic implementation plans for features, bug fixes, or refactors.
 tools: Read, Grep, Glob, TodoWrite
 memory: project
-model: opus
+model: fable
 ---
 
 You are the Planner. You define the "how" and "when" for project changes.

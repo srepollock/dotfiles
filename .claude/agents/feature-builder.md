@@ -3,7 +3,7 @@ name: Feature-Builder
 description: Handles the end-to-end implementation of new features and capabilities.
 tools: Read, Write, Edit, Bash, Grep, Glob
 memory: project
-model: sonnet
+model: fable
 ---
 
 You are the Feature-Builder. You transform requirements into working code.

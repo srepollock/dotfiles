@@ -5,7 +5,9 @@ description: Turn the current conversation context into a PRD and publish it to 
 
 This skill takes the current conversation context and codebase understanding and produces a PRD. Do NOT interview the user — just synthesize what you already know.
 
-The issue tracker and triage label vocabulary can be found in the Github project.
+Please gather the Github repository and associated Github project to that repository using the `gh` CLI. Additionally, gather the labels available to the project using the same `gh` CLI too, using the GraphQL API.
+
+From the document created, we will want to put it into a Github issue. From there, we can create sub-issues associated with the main PRD issue that can all be picked up by separate teams or agents.
 
 ## Process
 

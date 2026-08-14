@@ -8,28 +8,26 @@
 .mcp-secrets.env
 
 # ─────────────────────────────────────────────
-# Claude Code — sensitive files to exclude
+# Claude Code — allowlist, not denylist
+#
+# ~/.claude holds live OAuth tokens (.credentials.json), bot tokens
+# (channels/*/.env), daemon keys, full prompt history and every session
+# transcript. A denylist fails OPEN: anything a future Claude Code release adds
+# is committed by default until someone notices. This repo is public, so the
+# default has to be "ignored".
+#
+# Ignore everything under .claude/, then re-include exactly what claude_sync
+# manages. Keep this list identical to CLAUDE_PATHS in
+# .dotfile_scripts/claude_sync.
 # ─────────────────────────────────────────────
 
-# OAuth tokens and credentials
-.claude/.credentials.json
-
-# Machine-specific settings (may contain leaked API keys per issue #13106)
-.claude/settings.local.json
-
-# Session history and auto-memory
-.claude/projects/
-.claude/statsig/
-.claude/plans/
-.claude/plugins/
-.claude/cache/
-.claude/backups/
-.claude/file-history/
-.claude/shell-snapshots/
-.claude/session-env/
-.claude/clipboard/
-.claude/paste-cache/
-.claude/*.log
+.claude/*
+!.claude/CLAUDE.md
+!.claude/settings.json
+!.claude/agents/
+!.claude/commands/
+!.claude/skills/
+!.claude/hooks/
 
 # App state file (OAuth tokens, MCP keys, conversation refs)
 # NOTE: This lives at ~/.claude.json (outside .claude/ dir) —

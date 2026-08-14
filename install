@@ -17,6 +17,7 @@ case "$os" in
         ./.dotfile_scripts/backup_dotfiles
         ./.dotfile_scripts/macos/macos_install
         ./.dotfile_scripts/macos/macos_setup
+        ./.dotfile_scripts/claude_install
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)
             sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 
@@ -44,6 +45,7 @@ distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")
                 ;;
         esac
         ./.dotfile_scripts/linux/linux_setup
+        ./.dotfile_scripts/claude_install
         for f in $(find ./scripts/ -maxdepth 1 -type d); do
             filename=$(basename $f)
             sudo ln -s $PWD/scripts/$filename /usr/local/bin/$filename 

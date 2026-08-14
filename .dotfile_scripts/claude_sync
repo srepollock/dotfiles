@@ -1,0 +1,189 @@
+#!/usr/bin/env bash
+# claude_sync — explicit, manual sync between ~/.claude and this repo.
+#
+#   claude_sync status   Show what has drifted. Read-only. (default)
+#   claude_sync push     Copy live ~/.claude -> repo. Stages nothing, commits nothing.
+#   claude_sync pull     Copy repo -> live ~/.claude. Prompts before deleting.
+#
+# This is deliberately manual. Nothing here runs on a timer, on a hook, or on a
+# git operation — you run it when you want to, and you review and commit the
+# result yourself.
+#
+# Only the paths in CLAUDE_PATHS are ever touched. Anything else under
+# ~/.claude — credentials, session history, plugin caches, settings.local.json —
+# is invisible to this script by construction, not by exclusion rules.
+
+set -euo pipefail
+
+SCRIPT_DIR="$(cd "$(dirname "${BASH_SOURCE[0]}")/.." && pwd)"
+REPO_CLAUDE="$SCRIPT_DIR/.claude"
+LIVE_CLAUDE="$HOME/.claude"
+
+# Keep in sync with PATHS in .claude/hooks/dotfiles-drift-notice.sh
+CLAUDE_PATHS=(CLAUDE.md settings.json agents commands skills hooks)
+
+RSYNC_OPTS=(-a --delete --exclude '__pycache__' --exclude '.DS_Store')
+
+# ─────────────────────────────────────────────
+# Helpers
+# ─────────────────────────────────────────────
+
+usage() {
+    printf "Usage: claude_sync [status|push|pull] [-y]\n\n"
+    printf "  status   show drift between ~/.claude and the repo (read-only)\n"
+    printf "  push     live ~/.claude -> repo (review and commit yourself)\n"
+    printf "  pull     repo -> live ~/.claude (-y to skip the prompt)\n\n"
+    printf "Synced paths: %s\n" "${CLAUDE_PATHS[*]}"
+}
+
+# Emit one drift line per differing file. Prints nothing when in sync.
+#   ~ path   contents differ      + path   live only      - path   repo only
+drift_for() {
+    local p="$1" live="$LIVE_CLAUDE/$1" repo="$REPO_CLAUDE/$1"
+
+    if [ ! -e "$live" ] && [ ! -e "$repo" ]; then
+        return 0
+    fi
+    if [ ! -e "$repo" ]; then
+        printf "  + %s (live only)\n" "$p"
+        return 0
+    fi
+    if [ ! -e "$live" ]; then
+        printf "  - %s (repo only)\n" "$p"
+        return 0
+    fi
+
+    if [ -f "$live" ]; then
+        cmp -s "$repo" "$live" || printf "  ~ %s\n" "$p"
+        return 0
+    fi
+
+    local rel dir name
+    diff -rq "$repo" "$live" 2>/dev/null | while IFS= read -r line; do
+        case "$line" in
+            "Files "*" differ")
+                rel="${line#Files }"
+                rel="${rel%% and *}"
+                printf "  ~ %s\n" "${rel#"$REPO_CLAUDE"/}"
+                ;;
+            "Only in "*)
+                dir="${line#Only in }"
+                dir="${dir%%:*}"
+                name="${line##*: }"
+                case "$dir" in
+                    "$LIVE_CLAUDE"*) printf "  + %s/%s (live only)\n" "${dir#"$LIVE_CLAUDE"/}" "$name" ;;
+                    *) printf "  - %s/%s (repo only)\n" "${dir#"$REPO_CLAUDE"/}" "$name" ;;
+                esac
+                ;;
+            *) printf "  ? %s\n" "$line" ;;
+        esac
+    done
+}
+
+sync_path() {
+    local p="$1" src_root="$2" dst_root="$3"
+    local src="$src_root/$1" dst="$dst_root/$1"
+
+    [ -e "$src" ] || return 0
+
+    if [ -d "$src" ]; then
+        mkdir -p "$dst"
+        rsync "${RSYNC_OPTS[@]}" "$src/" "$dst/"
+    else
+        mkdir -p "$(dirname "$dst")"
+        rsync -a "$src" "$dst"
+    fi
+    printf "  ✓ %s\n" "$p"
+}
+
+# ─────────────────────────────────────────────
+# Subcommands
+# ─────────────────────────────────────────────
+
+cmd_status() {
+    local out
+    out="$(for p in "${CLAUDE_PATHS[@]}"; do drift_for "$p"; done)"
+
+    if [ -z "$out" ]; then
+        printf "✓ ~/.claude is in sync with %s\n" "$REPO_CLAUDE"
+        return 0
+    fi
+
+    printf "Drift between ~/.claude and the repo:\n\n%s\n\n" "$out"
+    printf "  %s file(s). Run 'claude_sync push' to bring the repo up to date.\n" \
+        "$(printf '%s\n' "$out" | wc -l | tr -d ' ')"
+}
+
+cmd_push() {
+    printf "Pushing ~/.claude -> %s\n\n" "$REPO_CLAUDE"
+    for p in "${CLAUDE_PATHS[@]}"; do
+        sync_path "$p" "$LIVE_CLAUDE" "$REPO_CLAUDE"
+    done
+
+    printf "\n─ git status ─\n"
+    git -C "$SCRIPT_DIR" status --short -- .claude || true
+    printf "\nNothing staged, nothing committed. Review the diff, then commit.\n"
+}
+
+cmd_pull() {
+    local assume_yes="$1"
+
+    if [ "$assume_yes" != "yes" ]; then
+        printf "This overwrites these paths in ~/.claude from the repo:\n"
+        printf "  %s\n" "${CLAUDE_PATHS[@]}"
+        printf "\nFiles present locally but not in the repo will be DELETED.\n"
+        printf "settings.local.json, credentials and session data are not touched.\n\n"
+        printf "Continue? [y/N] "
+        read -r reply
+        case "$reply" in
+            [yY] | [yY][eE][sS]) ;;
+            *)
+                printf "⚠ Aborted.\n"
+                return 1
+                ;;
+        esac
+    fi
+
+    printf "\nPulling %s -> ~/.claude\n\n" "$REPO_CLAUDE"
+    for p in "${CLAUDE_PATHS[@]}"; do
+        sync_path "$p" "$REPO_CLAUDE" "$LIVE_CLAUDE"
+    done
+
+    find "$LIVE_CLAUDE/hooks" -type f \( -name '*.sh' -o -name '*.py' \) \
+        -exec chmod +x {} + 2>/dev/null || true
+
+    printf "\n=== Pull complete ===\n"
+}
+
+# ─────────────────────────────────────────────
+# Entry point
+# ─────────────────────────────────────────────
+
+if [ ! -d "$REPO_CLAUDE" ]; then
+    printf "⚠ No .claude directory at %s\n" "$REPO_CLAUDE" >&2
+    exit 1
+fi
+
+action="status"
+assume_yes="no"
+for arg in "$@"; do
+    case "$arg" in
+        status | push | pull) action="$arg" ;;
+        -y | --yes) assume_yes="yes" ;;
+        -h | --help)
+            usage
+            exit 0
+            ;;
+        *)
+            printf "⚠ Unknown argument: %s\n\n" "$arg" >&2
+            usage >&2
+            exit 1
+            ;;
+    esac
+done
+
+case "$action" in
+    status) cmd_status ;;
+    push) cmd_push ;;
+    pull) cmd_pull "$assume_yes" ;;
+esac

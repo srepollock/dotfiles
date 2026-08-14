@@ -7,7 +7,7 @@ description: Break a plan, spec, or PRD into independently-grabbable issues on t
 
 Break a plan into independently-grabbable issues using vertical slices (tracer bullets).
 
-The issue tracker and triage label vocabulary can be found in the github project.
+Please gather the Github repository and associated Github project to that repository using the `gh` CLI. Additionally, gather the labels available to the project using the same `gh` CLI too, using the GraphQL API.
 
 ## Process
 

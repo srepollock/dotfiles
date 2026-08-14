@@ -13,15 +13,31 @@ printf "\n=== Claude Configuration Setup ===\n\n"
 
 # ─────────────────────────────────────────────
 # Claude Code — ~/.claude/
-# Using cp instead of symlinks due to known bugs:
-#   - https://github.com/anthropics/claude-code/issues/3575
-#   - https://github.com/anthropics/claude-code/issues/764
+#
+# Copies, never symlinks. Two reasons:
+#   1. Explicit control. A symlink means every edit to ~/.claude is instantly
+#      live in this repo's working tree. Sync should happen when you run
+#      `claude_sync push`, not as a side effect of typing.
+#   2. https://github.com/anthropics/claude-code/issues/764 (still open) —
+#      symlinked directory traversal is unreliable.
+#      (issues/3575, symlinked settings.json, was fixed 2025-07-24.)
+#
+# This script is the one-time bootstrap. Day to day, use claude_sync.
 # ─────────────────────────────────────────────
 
 printf "Setting up Claude Code configs...\n"
 
+# Every copy below is guarded and ends in `|| true`, so a missing source would
+# otherwise leave a set of empty directories and report success. Fail loudly
+# instead — this is exactly how the Docker CI job "passed" without ever copying
+# a single file.
+if [ ! -d "$CLAUDE_SRC" ]; then
+    printf "⚠ No .claude source at %s — nothing to install.\n" "$CLAUDE_SRC" >&2
+    exit 1
+fi
+
 # Create directory structure
-mkdir -p "$CLAUDE_DEST"/{commands,skills,agents,rules,output-styles}
+mkdir -p "$CLAUDE_DEST"/{commands,skills,agents,hooks}
 
 # Copy global instruction file
 if [ -f "$CLAUDE_SRC/CLAUDE.md" ]; then
@@ -55,10 +71,14 @@ if [ -d "$CLAUDE_SRC/agents" ] && [ "$(ls -A "$CLAUDE_SRC/agents" 2>/dev/null)" 
     printf "  ✓ agents/\n"
 fi
 
-# Copy rules
-if [ -d "$CLAUDE_SRC/rules" ] && [ "$(ls -A "$CLAUDE_SRC/rules" 2>/dev/null)" ]; then
-    cp "$CLAUDE_SRC/rules/"* "$CLAUDE_DEST/rules/" 2>/dev/null || true
-    printf "  ✓ rules/\n"
+# Copy hooks — settings.json references these by path, so they must land
+# executable or every hook silently no-ops.
+if [ -d "$CLAUDE_SRC/hooks" ] && [ "$(ls -A "$CLAUDE_SRC/hooks" 2>/dev/null)" ]; then
+    cp "$CLAUDE_SRC/hooks/"* "$CLAUDE_DEST/hooks/" 2>/dev/null || true
+    find "$CLAUDE_DEST/hooks" -type f \( -name '*.sh' -o -name '*.py' \) \
+        -exec chmod +x {} + 2>/dev/null || true
+    hook_count=$(find "$CLAUDE_SRC/hooks" -type f | wc -l | tr -d ' ')
+    printf "  ✓ hooks/ (%s hooks, executable)\n" "$hook_count"
 fi
 
 # ─────────────────────────────────────────────

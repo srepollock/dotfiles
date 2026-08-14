@@ -46,4 +46,17 @@ alias last_commit="git rev-parse head"
 alias ip="dig +short myip.opendns.com @resolver1.opendns.com"
 alias localip="ipconfig getifaddr en0"
 
+# Dotfiles
+export DOTFILES_DIR="${HOME}/documents/projects/dotfiles"
+
+# Manual Claude Code config sync: claude_sync [status|push|pull]
+# Deliberately manual — nothing syncs ~/.claude on a timer or a hook.
+claude_sync() {
+    if [ ! -x "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" ]; then
+        printf 'claude_sync: not found at %s\n' "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" >&2
+        return 1
+    fi
+    "${DOTFILES_DIR}/.dotfile_scripts/claude_sync" "$@"
+}
+
 export PATH

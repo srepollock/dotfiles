@@ -3,10 +3,16 @@
 export DEBIAN_FRONTEND=noninteractive
 export NEEDRESTART_MODE=a
 
-PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python python3 nodejs npm ncdu"
+command -v sudo >/dev/null || { printf "Missing required command: sudo\n" >&2; exit 1; }
+
+PACKAGE_LIST="locales vim rsync wget curl git git-lfs zsh make fonts-powerline python3 nodejs npm ncdu"
 
 printf "Updating apt\n"
 sudo apt update -y
+
+# curl is used below (keyrings) before the package list installs it, and is not
+# present on a stock ubuntu:latest — bootstrap it up front.
+command -v curl >/dev/null || sudo apt install -y curl
 
 printf "Install software-properties-common\n"
 sudo apt install -y software-properties-common
@@ -27,12 +33,6 @@ curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo 
 && sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg \
 && echo "deb [arch=$(dpkg --print-architecture) signed-by=/usr/share/keyrings/githubcli-archive-keyring.gpg] https://cli.github.com/packages stable main" | sudo tee /etc/apt/sources.list.d/github-cli.list > /dev/null
 
-printf "Adding deadsnakes for python"
-sudo add-apt-repository ppa:deadsnakes/ppa
-
-printf "Installing gpg keys for kali cli\n"
-sudo apt-key adv --keyserver keyserver.ubuntu.com --recv-keys ED444FF07D8D0BF6
-
 printf "Updating apt\n"
 sudo apt update -yqq
 
@@ -41,33 +41,15 @@ sudo apt upgrade -yqq
 
 printf "Installing packages for Debian Linux\n"
 sudo apt install -yqq $PACKAGE_LIST
+command -v rsync zsh git make >/dev/null || { printf "Core packages failed to install\n" >&2; exit 1; }
 
-printf "Adding Kali package repository to apt\n"
-echo "deb http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list
-echo "deb-src http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
-echo "#deb-src http://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
-echo "#deb https://http.kali.org/kali kali-rolling main non-free contrib" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/ /kali main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/ /wheezy main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali-dev main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali-dev main/debian-installer" | sudo tee -a /etc/apt/sources.list
-echo "#deb-src http://http.kali.org/kali kali-dev main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://http.kali.org/kali kali main/debian-installer" | sudo tee -a /etc/apt/sources.list
-echo "#deb-src http://http.kali.org/kali kali main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb http://security.kali.org/kali-security kali/updates main contrib non-free" | sudo tee -a /etc/apt/sources.list
-echo "#deb-src http://security.kali.org/kali-security kali/updates main contrib non-free" | sudo tee -a /etc/apt/sources.list
-
-printf "Installing Kali signature\n"
-#wget https://http.kali.org/kali/pool/main/k/kali-archive-keyring/kali-archive-keyring_2020.2_all.deb
-#sudo dpkg -i kali-archive-keyring_2020.2_all.deb
-wget -q -O - https://archive.kali.org/archive-key.asc | sudo apt-key add
+printf "Adding Kali keyring and package repository to apt\n"
+curl -fsSL https://archive.kali.org/archive-key.asc | sudo gpg --dearmor -o /usr/share/keyrings/kali-archive-keyring.gpg
+echo "deb [signed-by=/usr/share/keyrings/kali-archive-keyring.gpg] http://http.kali.org/kali kali-rolling main contrib non-free" | sudo tee /etc/apt/sources.list.d/kali.list
 
 printf "Updating apt with kali and signature\n"
 sudo apt update -yqq
 
-# NOTE: Breaks ssh
 printf "Upgrade apt with kali and signature\n"
 sudo apt upgrade -yqq
 
@@ -93,8 +75,8 @@ sudo systemctl start sshd.service
 sudo systemctl enable ssh.socket
 sudo systemctl start ssh.socket
 
-printf "Installing Python2 pip and Python3 pip3\n"
-sudo apt install -yqq python-pip python3-pip
+printf "Installing Python3 pip3\n"
+sudo apt install -yqq python3-pip
 
 printf "Installing outrun\n"
 pip3 install outrun

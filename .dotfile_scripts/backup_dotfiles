@@ -1,4 +1,5 @@
 #!/bin/bash
+set -euo pipefail
 
 fdate=$(date +%Y_%m_%d_%H-%M)
 backup_folder=.dotfiles_backup_$fdate
@@ -18,7 +19,5 @@ starter
 .dotnet
 EOF
 
-echo $EXCLUDE > exclude_folders.txt
 printf "Moving current dotfiles to backup folder: ~/${backup_folder}\n"
 rsync -ahvz --progress --exclude-from="$HOME/exclude_folders.txt" --include=".[^.]*" $HOME/ $HOME/$backup_folder/
-rm exclude_folders.txt

@@ -109,8 +109,8 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/prettier-format.sh",
             "timeout": 30,
-            "async": true,
-            "statusMessage": "Auto-formatting..."
+            "statusMessage": "Auto-formatting...",
+            "async": true
           }
         ]
       }
@@ -121,7 +121,7 @@
         "hooks": [
           {
             "type": "command",
-            "command": "$HOME/.claude/hooks/notify.sh 'Permission requested \u2014 check your terminal'",
+            "command": "$HOME/.claude/hooks/notify.sh 'Permission requested — check your terminal'",
             "async": true
           }
         ]
@@ -168,7 +168,8 @@
   "autoDreamEnabled": true,
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
+  "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "inputNeededNotifEnabled": false
+  "model": "opus"
 }

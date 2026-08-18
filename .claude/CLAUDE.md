@@ -10,7 +10,7 @@
 
 **Primary languages**: Python 3, TypeScript, Bash, YAML
 **Frontend**: React, Next.js
-**Package manager**: Always use `yarn` — never `npm` or `npx` unless a tool explicitly requires it
+**Package manager**: `yarn` is the default for new projects. In an existing repo the committed lockfile decides — detect it (`yarn.lock` / `package-lock.json` / `pnpm-lock.yaml`) and use that manager. Never introduce a second lockfile or migrate managers without asking.
 
 ## Communication Style
 
@@ -29,6 +29,8 @@
 - **Independent verification** — review or critique that is worth more from someone who hasn't seen your reasoning.
 
 **Do not delegate** when the task needs conversation context a fresh agent won't have; is under ~3 tool calls; needs a question answered mid-flight (subagents can't ask me anything); or produces output you'd have to re-read in full anyway.
+
+**Before planning batched work.** When handed more than one work item at once — several issues, a checklist, a spec with multiple deliverables — read all of them first, then flag duplicates, overlaps, and ordering dependencies and ask clarifying questions. Fan-out is the last step, not the first. Never dispatch subagents against a batch you haven't reconciled.
 
 ### Tiers by role, not by name
 
@@ -122,6 +124,16 @@ chore(deps): update typescript to 5.4
 - MAJOR — breaking changes
 - MINOR — new features, backward compatible
 - PATCH — bug fixes
+
+**Issue & PR workflow**: every non-trivial fix ships as GitHub issue → branch → PR that closes the issue, with milestone, labels, and priority set, plus a reference to any related issue. When a non-trivial fix is finished and verified, propose the issue title/labels/milestone and the PR — then wait for a single confirmation before writing anything to GitHub. Before opening the PR, self-review the diff for silent pass-throughs and unhandled enum or case branches.
+
+## Working Practices
+
+**Security reviews**: when reviewing changed files inline (without the `/security-review` skill), start with `git diff` (or `gh pr diff`) and review only the diff hunks plus their immediate context. No repo-wide exploration before the table exists — no `grep`/`find` sweeps, no reading files absent from the diff. Emit findings incrementally (file → risk → severity → fix) and produce the summary table within the first few tool calls. Once the table is out, you may open a specific unchanged call site to confirm or downgrade a listed finding — one targeted lookup per finding, never a sweep. Never end a turn with "now let me check X"; end with findings. When dispatched to the `security-reviewer` agent, that agent's scope contract governs instead — deliberately stricter: it never reads outside the changed set.
+
+**Verification before done**: never declare a fix done on the strength of the diff alone. Exercise the changed path in a running system — rebuild and redeploy first if the change lives in a built or deployed artifact — and cite the concrete evidence (log line, query result, row count, test output, HTTP response) in the summary.
+
+**Config changes**: prefer canonical config surfaces. Change the documented settings file, `.env`, or existing config schema rather than inventing new override layers, shadow files, or wrapper configs. If the canonical surface genuinely can't express the change, say so instead of routing around it.
 
 ## What to Avoid
 

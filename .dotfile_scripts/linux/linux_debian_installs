@@ -22,6 +22,9 @@ sudo apt install -yqq gnupg
 sudo apt install -yqq gnupg1 
 sudo apt install -yqq gnupg2
 
+printf "Installing jq\n"
+sudo apt install -yqq jq
+
 printf "Adding GitHub CLI package repository to apt\n"
 curl -fsSL https://cli.github.com/packages/githubcli-archive-keyring.gpg | sudo dd of=/usr/share/keyrings/githubcli-archive-keyring.gpg
 sudo chmod go+r /usr/share/keyrings/githubcli-archive-keyring.gpg

@@ -59,6 +59,8 @@ drift_for() {
     fi
 
     local rel dir name
+    # diff exits 1 when files differ; with pipefail that would fail the caller's
+    # command substitution under set -e and abort status with no output.
     diff -rq "$repo" "$live" 2>/dev/null | while IFS= read -r line; do
         case "$line" in
             "Files "*" differ")
@@ -77,7 +79,7 @@ drift_for() {
                 ;;
             *) printf "  ? %s\n" "$line" ;;
         esac
-    done
+    done || true
 }
 
 sync_path() {

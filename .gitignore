@@ -29,6 +29,9 @@
 !.claude/skills/
 !.claude/hooks/
 
+# Skills synced down from claude.ai — managed there, rewritten on every sync
+.claude/skills/synced/
+
 # App state file (OAuth tokens, MCP keys, conversation refs)
 # NOTE: This lives at ~/.claude.json (outside .claude/ dir) —
 # not relevant in the dotfiles repo but noted for awareness

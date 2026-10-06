@@ -7,6 +7,7 @@ A Claude Code mod that draws the context window as a stacked bar above the promp
 - Draws a bar above the prompt, sized to the terminal width, with a summary such as ` 40k/200k 20%` (used tokens, window size, percentage).
 - Each `/context` category gets a share of the bar proportional to its tokens, in the category's own colour, and at least one cell so small categories stay visible. Glyphs distinguish used (`█`), free (`░`) and buffer (`▒`) space.
 - Draws a legend under the bar listing each category with its token count, for example `█ Messages 25k`. Deferred and zero-token categories are omitted.
+- Draws a dimmed `usage` row under the legend with your plan's rate limits: percent used and time until reset for each window the session reports, for example `usage  5h 42% (2h15m)  7d 18% (4d6h)`. A spend limit shows as `$`. The row is hidden when the session reports no rate limits.
 - Refreshes after each turn, after compaction, on session start, when toggled on, and at most every 2 seconds on tool calls.
 - Yields to the feedback survey.
 - Visibility is persisted in the plugin store and restored on the next session.

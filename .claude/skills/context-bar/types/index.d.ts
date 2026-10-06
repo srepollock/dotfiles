@@ -7,11 +7,18 @@ export type Segment = {
   kind: SegmentKind
 }
 
+export type RateLimit = {
+  kind: string
+  percentUsed: number
+  resetsAt?: string
+}
+
 export type Snapshot = {
   segments: Segment[]
   totalTokens: number
   maxTokens: number
   percentage: number
+  rateLimits: RateLimit[]
 }
 
 declare module 'claude-code' {

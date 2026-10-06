@@ -1,7 +1,7 @@
 import { atom, read, update } from 'claude-code'
 import type { EngineInterface, Register } from 'claude-code'
 
-import { allocate, formatTokens, glyphFor, summaryText, toSnapshot } from './bar'
+import { allocate, formatReset, formatTokens, glyphFor, rateLabel, summaryText, toSnapshot } from './bar'
 
 const COMMAND = 'context-bar'
 const STORE_KEY = 'isVisible'
@@ -16,7 +16,7 @@ async function refresh($: EngineInterface): Promise<void> {
   const breakdown = usage.context.breakdown
   if (!breakdown) return
 
-  await update($, snapshot, () => toSnapshot(breakdown))
+  await update($, snapshot, () => toSnapshot(breakdown, usage.rateLimits))
 }
 
 function parseToggle(args: string, current: boolean): boolean {
@@ -94,6 +94,7 @@ export const register: Register = on => {
     const summary = summaryText(current)
     const barWidth = Math.max(MIN_BAR_WIDTH, e.props.bodyColumns - summary.length)
     const cells = allocate(current.segments, barWidth)
+    const now = await $.clock.now()
 
     return (
       <Box flexDirection="column">
@@ -118,6 +119,19 @@ export const register: Register = on => {
             </Text>
           ))}
         </Box>
+        {current.rateLimits.length > 0 && (
+          <Box key="usage" flexWrap="wrap" columnGap={2}>
+            <Text dimColor>usage</Text>
+            {current.rateLimits.map(limit => {
+              const reset = formatReset(limit.resetsAt, now)
+              return (
+                <Text dimColor>
+                  {rateLabel(limit.kind)} {Math.round(limit.percentUsed)}%{reset ? ` (${reset})` : ''}
+                </Text>
+              )
+            })}
+          </Box>
+        )}
       </Box>
     )
   })

@@ -2,7 +2,7 @@ import { describe, expect, test } from 'claude-code/testing'
 import type { Engine } from 'claude-code/testing'
 import type { ContextCategory, On, RenderPropsOf, SessionUsage } from 'claude-code'
 
-import { allocate, formatTokens, toSnapshot } from './bar'
+import { allocate, formatReset, formatTokens, rateLabel, toSnapshot } from './bar'
 import type { Segment } from '../types'
 
 const SURFACES = ['terminal', 'desktop'] as const
@@ -19,7 +19,10 @@ const CATEGORIES: ContextCategory[] = [
 function usage(): SessionUsage {
   return {
     startedAt: 0,
-    rateLimits: [],
+    rateLimits: [
+      { kind: 'five_hour', percentUsed: 42, resetsAt: new Date(Date.now() + 3 * 3_600_000).toISOString() },
+      { kind: 'seven_day', percentUsed: 11, resetsAt: new Date(Date.now() + 2 * 86_400_000).toISOString() },
+    ],
     context: {
       tokens: 40_000,
       window: 200_000,
@@ -50,6 +53,7 @@ function engineBeneath(on: On, store: Record<string, unknown> = {}): Record<stri
     return { value: undefined }
   })
   on('session.usage', () => ({ value: usage() }))
+  on('clock.now', () => ({ value: Date.now() }))
   on('session.start', ($, e) => ({ cwd: e.cwd }))
   on('command.register', ($, e) => ({ value: { command: e.name } }))
   on('ui.render', { component: 'AbovePrompt' }, ($, e) => {
@@ -112,7 +116,8 @@ describe('allocate', () => {
 
 describe('toSnapshot', () => {
   test('drops deferred rows and measures against rawMaxTokens', () => {
-    const snapshot = toSnapshot(usage().context.breakdown!)
+    const u = usage()
+    const snapshot = toSnapshot(u.context.breakdown!, u.rateLimits)
     expect(snapshot.segments.map(s => s.name)).toEqual([
       'System prompt',
       'System tools',
@@ -121,6 +126,29 @@ describe('toSnapshot', () => {
       'Autocompact buffer',
     ])
     expect(snapshot.maxTokens).toBe(200_000)
+  })
+
+  test('carries the rate-limit windows', () => {
+    const u = usage()
+    const snapshot = toSnapshot(u.context.breakdown!, u.rateLimits)
+    expect(snapshot.rateLimits.map(r => r.kind)).toEqual(['five_hour', 'seven_day'])
+  })
+})
+
+describe('rate-limit helpers', () => {
+  test('rateLabel maps known windows and passes others through', () => {
+    expect(rateLabel('five_hour')).toBe('5h')
+    expect(rateLabel('seven_day')).toBe('7d')
+    expect(rateLabel('spend_limit')).toBe('$')
+    expect(rateLabel('custom')).toBe('custom')
+  })
+
+  test('formatReset renders a countdown', () => {
+    const now = Date.now()
+    expect(formatReset(new Date(now + 30 * 60_000).toISOString(), now)).toBe('30m')
+    expect(formatReset(new Date(now + 3 * 3_600_000).toISOString(), now)).toBe('3h')
+    expect(formatReset(new Date(now - 60_000).toISOString(), now)).toBe('now')
+    expect(formatReset(undefined, now)).toBe('')
   })
 })
 
@@ -146,6 +174,10 @@ for (const surface of SURFACES) {
       const legend = await ui.find({ key: 'legend' })
       expect(legend?.text).toContain('Messages 25k')
       expect(legend?.text).not.toContain('MCP tools')
+
+      const usageRow = await ui.find({ key: 'usage' })
+      expect(usageRow?.text).toContain('5h 42%')
+      expect(usageRow?.text).toContain('7d 11%')
     })
 
     test('yields to a survey', async ($, on) => {

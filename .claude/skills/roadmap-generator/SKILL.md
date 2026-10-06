@@ -1,6 +1,6 @@
 ---
 name: roadmap-generator
-description: Generate a ROADMAp.md based on the current github project, issues, milestones and project goals.
+description: Generate a ROADMAP.md based on the current github project, issues, milestones and project goals.
 ---
 
 Generate a ROADMAP.md file for the project. This file is generated based on:

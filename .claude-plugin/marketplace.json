@@ -1,0 +1,22 @@
+{
+  "name": "srepollock-dotfiles",
+  "owner": { "name": "Spencer Pollock" },
+  "description": "Claude Code mods from srepollock/dotfiles: delegation nudges, an agents/progress panel, and a context-window bar.",
+  "plugins": [
+    {
+      "name": "delegate-guard",
+      "source": "./.claude/skills/delegate-guard",
+      "description": "Nudges the main agent to delegate to subagents when it pulls too much material into its own context, and records nudge stats per session."
+    },
+    {
+      "name": "savvy-progress",
+      "source": "./.claude/skills/savvy-progress",
+      "description": "A progress bar above the prompt and a live agents panel. Shows any subagents."
+    },
+    {
+      "name": "context-bar",
+      "source": "./.claude/skills/context-bar",
+      "description": "Draws the context window as a stacked bar above the prompt, one colour per /context category; toggle with /context-bar."
+    }
+  ]
+}

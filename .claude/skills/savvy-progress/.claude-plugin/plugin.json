@@ -2,5 +2,8 @@
   "name": "savvy-progress",
   "version": "0.1.0",
   "description": "A progress bar above the prompt and a live agents panel. Shows any subagents.",
+  "author": {
+    "name": "Spencer Pollock"
+  },
   "types": "./types/index.d.ts"
 }

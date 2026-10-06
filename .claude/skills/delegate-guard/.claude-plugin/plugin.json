@@ -1,0 +1,39 @@
+{
+  "name": "delegate-guard",
+  "version": "0.1.0",
+  "description": "Nudges the main agent to delegate to subagents when it pulls too much material into its own context, and records nudge stats per session.",
+  "author": { "name": "Spencer Pollock" },
+  "types": "./types/index.d.ts",
+  "userConfig": {
+    "enabled": {
+      "type": "boolean",
+      "title": "Enabled",
+      "description": "Nudge the main agent to delegate when its own context grows too fast.",
+      "default": true
+    },
+    "outputCharThreshold": {
+      "type": "number",
+      "title": "Output character threshold",
+      "description": "Fire the volume nudge when read-only tool output in the main thread exceeds this many characters in one turn.",
+      "default": 40000
+    },
+    "distinctFileThreshold": {
+      "type": "number",
+      "title": "Distinct files read threshold",
+      "description": "Fire the breadth nudge when the main thread has read this many distinct files in one turn.",
+      "default": 6
+    },
+    "searchCallThreshold": {
+      "type": "number",
+      "title": "Search call threshold",
+      "description": "Fire the search nudge after this many Grep, Glob or read-only search commands in one turn.",
+      "default": 6
+    },
+    "editFileThreshold": {
+      "type": "number",
+      "title": "Edited files threshold",
+      "description": "Fire the edits nudge when the main thread has edited this many distinct files in one turn.",
+      "default": 3
+    }
+  }
+}

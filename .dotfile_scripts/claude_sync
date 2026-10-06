@@ -94,6 +94,44 @@ drift_for() {
     done || true
 }
 
+# Fallback for hosts without rsync (Git Bash on Windows). Same semantics as
+# `rsync -a --delete --exclude ...`: excluded names are neither copied nor
+# deleted on the destination.
+mirror_dir_python() {
+    python3 - "$1" "$2" "${EXCLUDES[@]}" <<'PY'
+import shutil
+import sys
+from pathlib import Path
+
+src, dst, excludes = Path(sys.argv[1]), Path(sys.argv[2]), set(sys.argv[3:])
+
+
+def mirror(s: Path, d: Path) -> None:
+    d.mkdir(parents=True, exist_ok=True)
+    wanted = {c.name for c in s.iterdir() if c.name not in excludes}
+    for child in d.iterdir():
+        if child.name in excludes or child.name in wanted:
+            continue
+        if child.is_dir() and not child.is_symlink():
+            shutil.rmtree(child)
+        else:
+            child.unlink()
+    for name in wanted:
+        sc, dc = s / name, d / name
+        if sc.is_dir():
+            if dc.exists() and not dc.is_dir():
+                dc.unlink()
+            mirror(sc, dc)
+        else:
+            if dc.is_dir():
+                shutil.rmtree(dc)
+            shutil.copy2(sc, dc)
+
+
+mirror(src, dst)
+PY
+}
+
 sync_path() {
     local p="$1" src_root="$2" dst_root="$3"
     local src="$src_root/$1" dst="$dst_root/$1"
@@ -101,11 +139,15 @@ sync_path() {
     [ -e "$src" ] || return 0
 
     if [ -d "$src" ]; then
-        mkdir -p "$dst"
-        rsync "${RSYNC_OPTS[@]}" "$src/" "$dst/"
+        if command -v rsync >/dev/null 2>&1; then
+            mkdir -p "$dst"
+            rsync "${RSYNC_OPTS[@]}" "$src/" "$dst/"
+        else
+            mirror_dir_python "$src" "$dst"
+        fi
     else
         mkdir -p "$(dirname "$dst")"
-        rsync -a "$src" "$dst"
+        cp -p "$src" "$dst"
     fi
     printf "  ✓ %s\n" "$p"
 }

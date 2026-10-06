@@ -2,6 +2,9 @@
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 30,
   "includeCoAuthoredBy": true,
+  "env": {
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+  },
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -63,17 +66,11 @@
       "Bash(source:*)",
       "Bash(npx tsc:*)",
       "Bash(yarn run:*)",
-      "mcp__stitch__update_design_system",
-      "Bash(.venv/bin/python -m pytest --collect-only -q)",
-      "Bash(ls -la [Mm]ake*)",
-      "Bash(python3 -c \"import json; print\\(hasattr\\(json, ''response''\\)\\)\")",
       "Bash(pip install:*)",
-      "Bash(gh issue:*)",
-      "mcp__stitch__list_projects",
-      "mcp__stitch__list_design_systems"
+      "Bash(gh issue:*)"
     ],
     "deny": [
-      "Bash(rm -rf /*)",
+      "Bash(rm -rf /*:*)",
       "Bash(sudo rm:*)",
       "Bash(dd:*)"
     ],
@@ -162,9 +159,21 @@
     "security-guidance@claude-plugins-official": true,
     "cc-plugin-you-should-know@builtin": true
   },
+  "skillOverrides": {
+    "ast-refactorer": "off",
+    "mock-server-factory": "off",
+    "sandbox-manager": "off",
+    "security-scanner": "off",
+    "telemetry-analyzer": "off",
+    "workspace-indexer": "off",
+    "tribunal": "off",
+    "grill-me": "off"
+  },
   "spinnerTipsEnabled": true,
   "syntaxHighlightingDisabled": false,
   "alwaysThinkingEnabled": true,
+  "theme": "dark",
+  "autoUpdatesChannel": "latest",
   "modelSettings": {
     "claude-opus-5-5": {
       "effortLevel": "high"

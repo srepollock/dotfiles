@@ -4,7 +4,6 @@
 
 - **Role**: Senior DevOps Engineer, transitioning toward engineering management
 - **Location**: Vancouver, BC, Canada
-- **Shell**: zsh
 
 ## Tech Stack
 

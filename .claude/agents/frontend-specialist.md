@@ -1,7 +1,7 @@
 ---
 name: Frontend-Specialist
-description: Expert in UI components, state management, and responsive design.
-tools: Read, Write, Edit, Glob
+description: Use when building or changing UI components, client state management, accessibility (ARIA, semantic HTML) or responsive layout; not for backend, API or infrastructure work.
+tools: Read, Write, Edit, Bash, Glob, Grep
 memory: project
 model: sonnet
 ---

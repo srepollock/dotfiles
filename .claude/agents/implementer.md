@@ -1,7 +1,7 @@
 ---
 name: Implementer
-description: Executes specific, planned tasks to modify or add code.
-tools: Read, Write, Edit, Bash
+description: Use when a well-specified change from a written plan or TODO list needs executing exactly as scoped; not for design decisions, open-ended features (Feature-Builder) or debugging (Bug-Fixer).
+tools: Read, Write, Edit, Bash, Grep, Glob
 memory: project
 model: sonnet
 ---

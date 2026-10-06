@@ -1,6 +1,6 @@
 ---
 name: api-documenter
-description: Generates API documentation from code (REST, GraphQL, etc.).
+description: Use when API endpoints (REST, GraphQL) need documenting or an existing OpenAPI spec or docs/api.md needs updating to match the code; not for prose guides or code changes.
 model: haiku
 tools: Read, Write, Grep, Glob
 ---

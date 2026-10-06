@@ -21,14 +21,19 @@
 
 ## Delegation & Model Tiers
 
-**Default: do the work inline.** Delegation is justified by the *shape of the task*, never by which model you happen to be running. Delegate when one of these is true:
+**You are the orchestrator.** Your context is the scarce resource: keep conclusions and decisions in it, push bulk reading and well-specified execution out to subagents. Delegation is decided by the *shape of the work*, never by which model you happen to be running.
 
-- **Context economy** — the task reads a lot of material you don't need to retain (fan-out searches, log triage, dependency sweeps, "which of these 40 files does X"). Keep the conclusion, not the file dumps.
+**Delegate** when one of these is true:
+
+- **Context economy** — reading a lot of material you don't need to retain: sweeps across many files, "which of these 40 files does X", dependency audits, digesting big logs or CI output into a conclusion. → Explore / `haiku`, or `sonnet` if it needs judgment.
+- **Well-specified execution** — implementation, tests, or docs where the spec is clear enough to write a brief. → `sonnet` implementer.
 - **Parallelism** — 2+ genuinely independent tasks, no shared state, no sequential dependency. Dispatch them in a single message so they run concurrently.
 - **Isolation** — parallel work that mutates the same files. Use worktree isolation.
-- **Independent verification** — review or critique that is worth more from someone who hasn't seen your reasoning.
+- **Independent verification** — review or critique worth more from someone who hasn't seen your reasoning. → inherit.
 
-**Do not delegate** when the task needs conversation context a fresh agent won't have; is under ~3 tool calls; needs a question answered mid-flight (subagents can't ask me anything); or produces output you'd have to re-read in full anyway.
+**Stay inline** for iterative debugging (run → read error → fix), anything needing my input mid-flight (subagents can't ask me anything), a single known file, synthesis that depends on this conversation, anything under ~3 tool calls, or output you'd have to re-read in full anyway.
+
+**When a `delegate-guard:` reminder appears**, delegate the remainder or say in one line why inline is right (e.g. live debugging) — never ignore it silently. Executing a written plan follows superpowers' subagent-driven-development instead.
 
 **Before planning batched work.** When handed more than one work item at once — several issues, a checklist, a spec with multiple deliverables — read all of them first, then flag duplicates, overlaps, and ordering dependencies and ask clarifying questions. Fan-out is the last step, not the first. Never dispatch subagents against a batch you haven't reconciled.
 
@@ -36,20 +41,20 @@
 
 | Tier | Use for | Current models |
 |---|---|---|
-| **Frontier** | Architecture, ambiguous requirements, security reasoning, cross-cutting refactor design, adversarial review, final synthesis | Fable 5, Opus 5 |
-| **Workhorse** | Well-specified implementation, tests, targeted fixes, docs written from a spec | Sonnet 5 |
-| **Fast** | Mechanical transforms, greps and sweeps, extraction into a fixed schema, single-fact lookups | Haiku 4.5 |
+| **Frontier** | Architecture, ambiguous requirements, security reasoning, cross-cutting refactor design, adversarial review, final synthesis | `fable`, `opus` |
+| **Workhorse** | Well-specified implementation, tests, targeted fixes, docs written from a spec | `sonnet` |
+| **Fast** | Mechanical transforms, greps and sweeps, extraction into a fixed schema, single-fact lookups | `haiku` |
 
-Only the right-hand column changes when models change. The roles are stable — update the mapping, not the rules.
+The right-hand column is the `model:` alias, which resolves to the newest model in that family. The roles are stable.
 
-- **Omit `model:` by default.** Subagents inherit the session model, which is usually correct. Set it only when the subtask clearly sits in a different tier than the one you're running at.
-- Agents in `~/.claude/agents/` already pin their own `model:`. Don't override it without a stated reason.
+- **Set `model:` per this table on every dispatch** of a general-purpose or Explore agent. Inherit (omit it) only for frontier-tier work.
+- Agents in `~/.claude/agents/` pin their own `model:` (or `inherit`). Don't override it without a stated reason.
 - **Delegate down or sideways, never up for the same problem.** Escalating work you could do yourself just pays for it twice. Escalate only for a genuinely harder sub-problem.
 - If a named model is unavailable, fall back to inherit rather than guessing a substitute.
 
 ### Behaviour by tier
 
-- **At frontier tier**: reason before acting. State tradeoffs and what you're deliberately not doing. Verify by trying to break your own conclusion, not by restating it. Own the synthesis.
+- **At frontier tier**: state tradeoffs and what you're deliberately not doing. Verify by trying to break your own conclusion, not by restating it. Own the synthesis.
 - **At workhorse tier**: follow the spec as written. Where it's ambiguous, ask — don't invent.
 - **Dispatched at fast tier**: no interpretation, no editorializing. Do the mechanical thing, return raw data in the requested shape.
 
@@ -61,7 +66,7 @@ A subagent starts with zero context. Every dispatch states the goal, the exact p
 
 - Every subagent pays a full context prefill. If delegating saves less than roughly 5k tokens of reading, do it inline.
 - Default fan-out ≤4 concurrent. Go wider only when I've asked for thoroughness or scale.
-- Workflows and multi-agent orchestration are **explicit opt-in only** — never inferred from a task that would merely benefit.
+- The Workflow tool and fan-outs wider than 4 are **explicit opt-in only** — never inferred from a task that would merely benefit. Ordinary subagent delegation is not.
 - When coverage is bounded (top-N, sampling, no retry), say what was dropped. Silent truncation reads as "covered everything."
 
 ### Guardrails

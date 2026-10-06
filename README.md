@@ -94,6 +94,25 @@ claude-config: 3 file(s) drifted (run: claude_sync status)
 `claude_sync` touches only the paths in its `CLAUDE_PATHS` allowlist
 (`CLAUDE.md settings.json agents commands skills hooks`). Credentials, session
 history, plugin caches and `settings.local.json` are outside it by construction.
+`skills/synced/` — Claude Code's download of your claude.ai account skills — is
+excluded inside that allowlist: never pushed, never deleted by `pull`, never
+reported as drift.
+
+### Windows
+
+Run the same scripts through Git Bash; from PowerShell:
+
+```powershell
+bash ./install                              # Claude config only; replaces CLAUDE.md + settings.json
+bash ./.dotfile_scripts/claude_sync status
+```
+
+`claude_sync` uses `python3` to mirror directories when `rsync` is missing, and
+the hooks need it too — install Python 3 (the Microsoft Store build provides
+`python3`). `.gitattributes` keeps synced files LF regardless of
+`core.autocrlf`, so bash hooks keep working and `status` doesn't report every file
+as drifted. Claude Desktop has no Windows config here; the Desktop app's Code tab
+reads `~/.claude` like the CLI.
 
 ### What's NOT committed
 

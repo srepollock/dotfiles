@@ -8,26 +8,27 @@ Claude Code loads skills from `~/.claude/skills/<name>/SKILL.md`. You invoke one
 
 | Skill | Use it for | Notes |
 | --- | --- | --- |
-| [`/ast-refactorer`](./ast-refactorer/SKILL.md) | Safe, automated code transformations using AST manipulation. | |
+| [`/ast-refactorer`](./ast-refactorer/SKILL.md) | Safe, automated code transformations using AST manipulation. | Off by default (`skillOverrides`) |
 | [`/changelog-generator`](./changelog-generator/SKILL.md) | Generating or appending to a `CHANGELOG.md` from relevant commits. | |
 | [`/compact-safe`](./compact-safe/SKILL.md) | Compacting the conversation while preserving key session state. | |
-| [`/grill-me`](./grill-me/SKILL.md) | Being interviewed relentlessly about a plan or design until it is fully stress-tested. | |
-| [`/mock-server-factory`](./mock-server-factory/SKILL.md) | Generating and managing local mock servers from OpenAPI, GraphQL, or Protobuf specs. | |
+| [`/grill-me`](./grill-me/SKILL.md) | Being interviewed relentlessly about a plan or design until it is fully stress-tested. | Off by default (`skillOverrides`) |
+| [`/issue`](./issue/SKILL.md) | Creating a formatted GitHub issue with `gh`, applying triage priority labels. | |
+| [`/mock-server-factory`](./mock-server-factory/SKILL.md) | Generating and managing local mock servers from OpenAPI, GraphQL, or Protobuf specs. | Off by default (`skillOverrides`) |
 | [`/pr`](./pr/SKILL.md) | Writing a pull request description from the current branch diff against `trunk`. | Runs in a fork |
 | [`/rc`](./rc/SKILL.md) | Showing the current Remote Control URL and session info for phone access. | User-invoked only |
 | [`/review`](./review/SKILL.md) | Reviewing recent changes for code quality, security, and test coverage gaps. | Runs in a fork |
 | [`/roadmap-generator`](./roadmap-generator/SKILL.md) | Generating a `ROADMAP.md` from the GitHub project, issues, milestones, and goals. | |
-| [`/sandbox-manager`](./sandbox-manager/SKILL.md) | Running code, reproductions, and baseline tests in ephemeral Docker/Podman environments. | |
+| [`/sandbox-manager`](./sandbox-manager/SKILL.md) | Running code, reproductions, and baseline tests in ephemeral Docker/Podman environments. | Off by default (`skillOverrides`) |
 | [`/security-review`](./security-review/SKILL.md) | Diff-scoped security review of changed files. | |
-| [`/security-scanner`](./security-scanner/SKILL.md) | Running Snyk, Bandit, npm audit and similar tools to confirm vulnerabilities. | |
+| [`/security-scanner`](./security-scanner/SKILL.md) | Running Snyk, Bandit, npm audit and similar tools to confirm vulnerabilities. | Off by default (`skillOverrides`) |
 | [`/ship-changes`](./ship-changes/SKILL.md) | Shipping local changes end-to-end: commit, issue, `feat/` or `fix/` branch, PR, project board. | |
 | [`/start-day`](./start-day/SKILL.md) | Morning kickoff: check project state, review the roadmap, suggest the next task. | |
-| [`/telemetry-analyzer`](./telemetry-analyzer/SKILL.md) | Parsing logs, profiles, and telemetry to find bottlenecks and runtime errors. | |
+| [`/telemetry-analyzer`](./telemetry-analyzer/SKILL.md) | Parsing logs, profiles, and telemetry to find bottlenecks and runtime errors. | Off by default (`skillOverrides`) |
 | [`/to-issues`](./to-issues/SKILL.md) | Breaking a plan, spec, or PRD into independently-grabbable tracker issues (tracer-bullet slices). | |
 | [`/to-prd`](./to-prd/SKILL.md) | Turning the current conversation into a PRD and publishing it to the issue tracker. | |
-| [`/tribunal`](./tribunal/SKILL.md) | A five-agent panel review (Architect, Shield, Optimizer, Maintainer, Tester) of any codebase. | |
+| [`/tribunal`](./tribunal/SKILL.md) | A five-agent panel review (Architect, Shield, Optimizer, Maintainer, Tester) of any codebase. | Off by default (`skillOverrides`) |
 | [`/update-version`](./update-version/SKILL.md) | Updating the project version. | |
-| [`/workspace-indexer`](./workspace-indexer/SKILL.md) | Retrieving design intent from docs, ADRs, and historical code comments. | |
+| [`/workspace-indexer`](./workspace-indexer/SKILL.md) | Retrieving design intent from docs, ADRs, and historical code comments. | Off by default (`skillOverrides`) |
 
 ## Mods
 

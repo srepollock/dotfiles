@@ -24,7 +24,10 @@ case "$os" in
         done
         ;;
     msys)
-        printf "Windows not supported\n"
+        # Git Bash on Windows: Claude config only. Exits before the shared tail,
+        # which changes the login shell and deletes this checkout's scripts.
+        ./.dotfile_scripts/claude_install
+        exit $?
         ;;
     linux)
 distro=$(cat /etc/os-release | grep -E "ID=[a-zA-Z]" | sed "s/ID=//")

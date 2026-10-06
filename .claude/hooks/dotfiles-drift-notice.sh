@@ -19,6 +19,13 @@ LIVE_CLAUDE="${HOME}/.claude"
 
 # Keep in sync with CLAUDE_PATHS in .dotfile_scripts/claude_sync
 PATHS=(CLAUDE.md settings.json agents commands skills hooks)
+# Keep in sync with EXCLUDES in .dotfile_scripts/claude_sync
+EXCLUDES=(__pycache__ .DS_Store synced)
+
+DIFF_OPTS=(-rq)
+for x in "${EXCLUDES[@]}"; do
+    DIFF_OPTS+=(-x "${x}")
+done
 
 drifted=0
 for p in "${PATHS[@]}"; do
@@ -34,7 +41,7 @@ for p in "${PATHS[@]}"; do
         continue
     fi
 
-    n="$(diff -rq "${repo}" "${live}" 2>/dev/null | wc -l | tr -d ' ')"
+    n="$(diff "${DIFF_OPTS[@]}" "${repo}" "${live}" 2>/dev/null | wc -l | tr -d ' ')"
     drifted=$((drifted + n))
 done
 

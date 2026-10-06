@@ -11,7 +11,8 @@
 #
 # Only the paths in CLAUDE_PATHS are ever touched. Anything else under
 # ~/.claude — credentials, session history, plugin caches, settings.local.json —
-# is invisible to this script by construction, not by exclusion rules.
+# is invisible to this script by construction. Within those paths, EXCLUDES
+# carves out the few app-owned or junk entries.
 
 set -euo pipefail
 
@@ -22,7 +23,18 @@ LIVE_CLAUDE="$HOME/.claude"
 # Keep in sync with PATHS in .claude/hooks/dotfiles-drift-notice.sh
 CLAUDE_PATHS=(CLAUDE.md settings.json agents commands skills hooks)
 
-RSYNC_OPTS=(-a --delete --exclude '__pycache__' --exclude '.DS_Store')
+# Names skipped at any depth, on both sides: never copied, never deleted, never
+# reported as drift. skills/synced is Claude Code's down-sync of claude.ai
+# account skills — the app owns it, and push must never copy it into this repo.
+# Keep in sync with EXCLUDES in .claude/hooks/dotfiles-drift-notice.sh
+EXCLUDES=(__pycache__ .DS_Store synced)
+
+RSYNC_OPTS=(-a --delete)
+DIFF_OPTS=(-rq)
+for x in "${EXCLUDES[@]}"; do
+    RSYNC_OPTS+=(--exclude "$x")
+    DIFF_OPTS+=(-x "$x")
+done
 
 # ─────────────────────────────────────────────
 # Helpers
@@ -61,7 +73,7 @@ drift_for() {
     local rel dir name
     # diff exits 1 when files differ; with pipefail that would fail the caller's
     # command substitution under set -e and abort status with no output.
-    diff -rq "$repo" "$live" 2>/dev/null | while IFS= read -r line; do
+    diff "${DIFF_OPTS[@]}" "$repo" "$live" 2>/dev/null | while IFS= read -r line; do
         case "$line" in
             "Files "*" differ")
                 rel="${line#Files }"

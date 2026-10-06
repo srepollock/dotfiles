@@ -1,7 +1,6 @@
 ---
 name: ast-refactorer
 description: Executes safe, automated code transformations using Abstract Syntax Tree (AST) manipulation.
-capabilities: [edit_file, fs_read, run_terminal_cmd]
 ---
 
 # 🧹 AST Refactorer

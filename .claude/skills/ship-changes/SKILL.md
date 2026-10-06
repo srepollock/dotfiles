@@ -5,10 +5,8 @@ description: >
   create a GitHub issue from the diff against the target branch, create a properly named
   `feat/<issue-number>` or `fix/<issue-number>` branch, push it, create a PR that
   targets the base branch and closes the issue, and add both the issue and PR to the
-  GitHub project board.
-  Trigger on: "ship changes", "create issue and pr", "issue and pr", "ship it",
-  "package changes", "ship my work", "prep for review", "open issue and pr",
-  "send changes", "push and pr".
+  GitHub project board. Use when the user asks to ship or package local changes
+  for review, or to open an issue and PR for them.
 ---
 
 # Ship Changes — Issue + Branch + PR Pipeline
@@ -26,16 +24,13 @@ Automates the full workflow from local changes to a reviewable PR against a targ
 
 ## Configuration
 
-Before using this skill, configure these constants for your repository:
+Resolve these values at the start and use them throughout:
 
-| Key | Value | Example |
-|-----|-------|---------|
-| `REPO_OWNER` | Your GitHub username | `srepollock` |
-| `REPO_NAME` | Repository name | `my-project` |
-| `TARGET_BRANCH` | Base branch for PRs | `development`, `main` |
-| `PROJECT_NUMBER` | GitHub Project number | `2` |
-
-Replace these placeholders throughout the workflow with your actual values.
+| Key | Source |
+|-----|--------|
+| `REPO_OWNER`, `REPO_NAME` | `gh repo view --json owner,name` |
+| `TARGET_BRANCH` | `development` unless the user named another; confirmed in Step 5 |
+| `PROJECT_NUMBER` | `gh project list --owner $REPO_OWNER`; if there is more than one, pick the likeliest and confirm it in Step 5 |
 
 ---
 
@@ -73,9 +68,11 @@ git log origin/$TARGET_BRANCH...HEAD --oneline
 
 Use these to understand **what changed** and **why**. This analysis drives the issue title, description, labels, and PR content in later steps.
 
+Self-review the diff for silent pass-throughs and unhandled enum or case branches. Report any you find before continuing — they get fixed before anything ships.
+
 ---
 
-## Step 3 — Infer Change Type and Confirm with User
+## Step 3 — Infer Change Type
 
 Analyse the diff, commit messages, and current branch name to infer whether this is a **feature** (`feat`) or **bug fix** (`fix`).
 
@@ -85,11 +82,7 @@ Analyse the diff, commit messages, and current branch name to infer whether this
 2. Current branch name pattern: `feat/*`, `fix/*`, `hotfix/*`
 3. Nature of the changes: new files/endpoints = feature; patching existing logic = fix
 
-Present the inferred type to the user and ask for confirmation:
-
-> Based on the changes, this looks like a **feature** (or **fix**). Is that correct?
-
-Allow the user to override.
+The inferred type goes into the single proposal in Step 5.
 
 ---
 
@@ -102,21 +95,11 @@ gh label list --repo $REPO_OWNER/$REPO_NAME --limit 100 --json name,description
 gh api repos/$REPO_OWNER/$REPO_NAME/milestones --jq '.[] | {number: .number, title: .title}'
 ```
 
-Select the most appropriate labels based on the change type and affected areas. Present the selected labels **and** a milestone picker to the user for confirmation:
-
-> Labels: `bug`, `enhancement`
-> Milestone: which milestone applies?
->   1. Alpha
->   2. Beta
->   3. Release
->   4. Post Release
->   (or press Enter to skip)
-
-Capture the chosen milestone title — it will be applied to both the issue and the PR.
+Select the most appropriate labels based on the change type and affected areas, a priority (as a priority label if the repo has them), and the milestone that fits. These go into the single proposal in Step 5; the milestone is applied to both the issue and the PR.
 
 ---
 
-## Step 5 — Search for an Existing Issue
+## Step 5 — Find Related Issues and Confirm Once
 
 Derive 2–5 feature keywords from the diff and commit messages (e.g. `ship changes skill`, `retry logic`).
 
@@ -128,15 +111,15 @@ gh issue list \
   --json number,title,url
 ```
 
-If matches are found, present them to the user:
+Then present one proposal and wait for a single confirmation. Nothing is written to GitHub before it:
 
-> Found open issue(s) matching "<feature keywords>":
-> - #NNN — Title (URL)
->
-> Use one of these, or create a new issue?
+- Type (`feat` / `fix`)
+- Issue: reuse an existing match (#NNN), or the new issue's title
+- Labels, priority, and milestone
+- Related issues to reference (other matches from the search)
+- PR title, base branch (`$TARGET_BRANCH`), and project board (`$PROJECT_NUMBER`)
 
-- If the user selects an existing issue → capture its number and **skip Step 6**.
-- If no matches, or the user wants a new issue → proceed to Step 6.
+Apply any corrections from that one reply. If the user picks an existing issue, capture its number and **skip Step 6**.
 
 ---
 
@@ -161,7 +144,10 @@ Build the issue body from the diff analysis.
 [Relevant files, architectural considerations, or dependencies]
 
 ## Priority
-[Optional: priority level or category]
+[Priority confirmed in Step 5]
+
+## Related
+[Related issues from Step 5, or omit]
 ```
 
 **For a bug fix:**
@@ -180,10 +166,13 @@ Build the issue body from the diff analysis.
 - [ ] Tests added/updated
 
 ## Priority
-[Optional: priority level or category]
+[Priority confirmed in Step 5]
+
+## Related
+[Related issues from Step 5, or omit]
 ```
 
-Create the issue, including the milestone if one was selected in Step 4:
+Create the issue with the confirmed labels and milestone:
 
 ```bash
 gh issue create \
@@ -194,12 +183,12 @@ gh issue create \
 EOF
 )" \
   --label "<label1>,<label2>" \
-  --milestone "<milestone title>"   # omit flag if user skipped
+  --milestone "<milestone title>"   # omit only if the repo has no milestones
 ```
 
 Capture the issue number from the output URL (e.g., `https://github.com/.../issues/NNN` -> `NNN`).
 
-If an **existing issue** was selected in Step 5 and it has no milestone set, apply the chosen milestone now:
+If an **existing issue** was selected in Step 5 and it has no milestone set, apply the confirmed milestone now:
 
 ```bash
 gh issue edit <NNN> --repo $REPO_OWNER/$REPO_NAME --milestone "<milestone title>"
@@ -229,7 +218,7 @@ git checkout -b <type>/<issue-number>
 git push -u origin <type>/<issue-number>
 ```
 
-Where `<type>` is `feat` or `fix` and `<issue-number>` is the number from Step 5.
+Where `<type>` is `feat` or `fix` and `<issue-number>` is the number from Step 5 (existing issue) or Step 6 (new issue).
 
 **Note:** All commits from the current branch carry over since the new branch is created from HEAD.
 
@@ -284,9 +273,9 @@ EOF
 )"
 ```
 
-Omit `--milestone` if the user skipped milestone selection in Step 4.
+Omit `--milestone` only if the repo has no milestones.
 
-**Critical:** The PR body MUST include `Closes #<issue-number>` so the issue auto-closes on merge.
+The PR body includes `Closes #<issue-number>` so the issue auto-closes on merge.
 
 ---
 
@@ -332,12 +321,3 @@ Ship complete!
   ```
 - If the branch name already exists, ask the user whether to force-update or pick an alternative name.
 - If the diff against `$TARGET_BRANCH` is empty, abort and inform the user there are no changes to ship.
-
----
-
-## Usage Tips
-
-- **Multi-repository workflow**: If you use this skill across different repos, create a small config file or prompt the user for `REPO_OWNER`, `REPO_NAME`, `TARGET_BRANCH`, and `PROJECT_NUMBER` at the start of the workflow.
-- **Custom labels**: Adjust the label suggestions in Step 4 based on your repository's labeling conventions.
-- **Milestone strategy**: Skip milestone selection if your repo doesn't use GitHub Milestones.
-- **Test checklists**: Expand the test checklist heuristics table in Step 9 based on your specific project's testing needs.

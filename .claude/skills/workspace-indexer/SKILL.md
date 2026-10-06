@@ -1,7 +1,6 @@
 ---
 name: workspace-indexer
 description: Indexes and retrieves context from documentation, ADRs, and historical code comments to provide agents with design intent.
-capabilities: [fs_read, run_terminal_cmd]
 ---
 
 # 🔍 Workspace Indexer
@@ -18,4 +17,4 @@ This skill provides agents with a "long-term memory" of the project's design dec
 
 - Prioritize Architecture Decision Records (ADRs).
 - Link code comments to documentation where cross-references exist.
-- Flag "Stale Context" if documentation contradicts the current state of `main` branch code.
+- Flag "Stale Context" if documentation contradicts the current state of the default branch.

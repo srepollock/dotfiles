@@ -7,7 +7,7 @@ For each conversation, show:
 - First 60-80 characters of the conversation topic
 - Session ID (if available)
 
-IMPORTANT: Format as a plain text table with properly padded columns (NOT markdown tables).
+Format as a plain-text table with padded columns, not a markdown table.
 
 Focus on the most recent 10 conversations in the first table. If there are more, show another 5-7 in an "Additional Recent Conversations" table.
 

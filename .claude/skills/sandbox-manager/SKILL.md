@@ -1,7 +1,6 @@
 ---
 name: sandbox-manager
 description: Manages ephemeral, restricted environments (Docker/Podman) for safe code execution, reproduction, and baseline testing.
-capabilities: [run_terminal_cmd]
 ---
 
 # 🛡️ Sandbox Manager
@@ -11,7 +10,7 @@ This skill allows the Bug-Fixer and Tester to execute code without risking the p
 ## ⚖️ Usage Protocol
 
 1. **Environment Setup**: Define a minimal container image matching the project's detected stack (Node, Python, Go, etc.).
-2. **Execution Phase**: Mount the local code as read-only (or a cloned temporary directory) and run `./tester.sh` or specific reproduction scripts.
+2. **Execution Phase**: Mount the local code as read-only (or a cloned temporary directory) and run the project's test command (what `~/.claude/skills/tribunal/tester.sh` detects) or specific reproduction scripts.
 3. **Capture Phase**: Log all output, exit codes, and resource usage metrics.
 4. **Cleanup Phase**: Terminate and remove the container immediately after execution.
 

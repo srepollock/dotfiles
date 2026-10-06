@@ -73,7 +73,7 @@
       "mcp__stitch__list_design_systems"
     ],
     "deny": [
-      "Bash(rm -rf /*:*)",
+      "Bash(rm -rf /*)",
       "Bash(sudo rm:*)",
       "Bash(dd:*)"
     ],
@@ -159,11 +159,18 @@
     "superpowers@claude-plugins-official": true,
     "skill-creator@claude-plugins-official": true,
     "github@claude-plugins-official": true,
-    "security-guidance@claude-plugins-official": true
+    "security-guidance@claude-plugins-official": true,
+    "cc-plugin-you-should-know@builtin": true
   },
   "spinnerTipsEnabled": true,
   "syntaxHighlightingDisabled": false,
   "alwaysThinkingEnabled": true,
+  "modelSettings": {
+    "claude-opus-5-5": {
+      "effortLevel": "high"
+    }
+  },
+  "advisorModel": "fable",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
   "switchModelsOnFlag": true,
@@ -171,5 +178,46 @@
   "inputNeededNotifEnabled": false,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
-  "model": "opus"
+  "autoMode": {
+    "allow": [
+      "$defaults",
+      "Bash(make check:*)",
+      "Bash(make lint:*)",
+      "Bash(make fmt:*)",
+      "Bash(make typecheck:*)",
+      "Bash(make test:*)"
+    ],
+    "soft_deny": [
+      "$defaults",
+      "Bash(make guard-release:*)",
+      "Bash(make backup:*)"
+    ],
+    "environment": [
+      "### Org-wide",
+      "**Organization**: None configured",
+      "**Cloud provider(s)**: None configured",
+      "**Repository visibility**: Private (srepollock/meridian-ii, confirmed via gh)",
+      "**Internal sharing / snippet hosting**: None configured — treat public paste/gist services as outside the trust boundary",
+      "**Secrets management**: `.env` (gitignored; `.env.example` is the committed template) — CI secrets referenced by name only: CLAUDE_CODE_OAUTH_TOKEN, DEPENDABOT_MERGE_TOKEN, GEMINI_API_KEY, GITHUB_TOKEN",
+      "**Default / protected branches**: `main` is the default branch; `main` is protected (classic branch protection) and covered by an active ruleset named `Default`",
+      "**CI/CD deploy targets**: None configured — this project is a local/self-hosted trading stack (Docker Compose); no cloud deploy target found in recon",
+      "**Network posture**: None configured",
+      "**Host containment**: None configured — assume Claude Code runs on an ordinary developer machine with open internet",
+      "**Source control**: The trusted repo (srepollock/meridian-ii) and its origin remote (github.com:srepollock/meridian-ii) only — no additional orgs configured",
+      "**Trusted internal domains**: None configured",
+      "**Trusted cloud buckets**: None configured",
+      "**Key internal services**: Alpaca broker/market-data API (paper: https://paper-api.alpaca.markets, data: https://data.alpaca.markets) — trading integration per .env.example, not a general-purpose trust grant",
+      "**Internal package registry**: None configured",
+      "**Sensitive data locations & audiences**: `.env`, `.env.*` (excluding `.env.example`), `secrets/`, and multiple dated backups (`.env.backup-*`, `.env.bak.*`) and worktree copies under `.claude/worktrees/*/.env` / `.env.example` — broker API keys, DB password, news-provider API keys; share only with audiences cleared at the [named+specifics] bar",
+      "**Data retention / declassification**: None configured",
+      "**Sensitive remote targets**: any namespace, host, or container whose name carries `prod` or `production` as a whole word or name segment; live trading gate (TRADING_MODE=live + LIVE_TRADING_ENABLED=true) treated as a production-equivalent boundary for this repo — real broker order submission",
+      "**Protected deployment namespaces / environments**: None configured — fall back to the Sensitive remote targets heuristic",
+      "**Protected IaC scopes**: IAM, RBAC, networking, quota, and node-pool resources; anything whose name or tag carries `prod` or `production` as a whole word or name segment",
+      "### User-specific",
+      "**Primary use of Claude Code**: software development (DevOps/trading systems engineering)",
+      "**Trusted repo**: srepollock/meridian-ii (private) — the working directory's repo and its origin remote only",
+      "**Org-specific CLIs**: None configured",
+      "routine actions under the meridian-ii repo (make targets: install, check, lint, fmt, typecheck, test, build, bootstrap, backfill-*, docs, config, guard-dev, guard-release) are routine dev workflow, not org-wide"
+    ]
+  }
 }

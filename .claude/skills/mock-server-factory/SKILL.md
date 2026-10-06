@@ -1,7 +1,6 @@
 ---
 name: mock-server-factory
 description: Generates and manages local mock servers based on OpenAPI, GraphQL, or Protobuf specifications.
-capabilities: [run_terminal_cmd, edit_file]
 ---
 
 # 🎭 Mock Server Factory

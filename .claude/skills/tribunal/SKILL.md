@@ -1,7 +1,6 @@
 ---
 name: tribunal
 description: Project-agnostic 5-agent panel review (Architect, Shield, Optimizer, Maintainer, Tester) for any codebase.
-capabilities: [run_terminal_cmd, edit_file, fs_read]
 ---
 
 # 🏛️ The Universal Tribunal
@@ -13,7 +12,7 @@ When activated, coordinate five specialized personas to analyze and implement ch
 1.  **Context Discovery**: Before the Critique Phase, agents must scan the root directory (e.g., `package.json`, `go.mod`, `Cargo.toml`, `requirements.txt`) to identify the tech stack.
 2.  **The Critique Phase**: Generate a concise verdict from each of the 5 personas.
 3.  **The Conflict Resolution**: The **Architect** resolves clashes based on the project's identified scale and complexity.
-4.  **The Test Mandate**: The **Tester** must attempt to run existing project tests via `./tester.sh` to establish a baseline.
+4.  **The Test Mandate**: The **Tester** must attempt to run existing project tests via `tester.sh` (in this skill's directory, run from the project root) to establish a baseline.
 
 ---
 

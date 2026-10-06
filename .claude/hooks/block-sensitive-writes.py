@@ -37,12 +37,16 @@ def block(reason: str) -> None:
     sys.exit(0)
 
 
+# Committed, secret-free examples of a sensitive file: documentation, not secrets.
+EXAMPLE_SUFFIXES = (".example", ".sample", ".template", ".dist")
+
+
 def main() -> None:
     data = json.load(sys.stdin)
     path = data.get("tool_input", {}).get("file_path", "")
     name = Path(path).name
 
-    if (name in SENSITIVE or name.startswith(".env")) and not name.endswith(".template"):
+    if (name in SENSITIVE or name.startswith(".env")) and not name.endswith(EXAMPLE_SUFFIXES):
         block(f"Blocked edit to sensitive file: {path}")
 
     if name in LOCKFILES:

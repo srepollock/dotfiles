@@ -1,7 +1,6 @@
 ---
 name: telemetry-analyzer
 description: Parses logs, performance profiles, and telemetry data to identify bottlenecks and runtime errors.
-capabilities: [fs_read, run_terminal_cmd]
 ---
 
 # 📈 Telemetry Analyzer

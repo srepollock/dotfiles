@@ -1,0 +1,7 @@
+# Synced into ~/.claude and executed by bash/python on every platform. CRLF
+# from core.autocrlf on Windows breaks shebangs and makes claude_sync report
+# every file as drifted, so these stay LF in the working tree everywhere.
+.claude/** text eol=lf
+.claude-plugin/** text eol=lf
+.dotfile_scripts/** text eol=lf
+install text eol=lf

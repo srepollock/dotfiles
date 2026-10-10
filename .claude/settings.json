@@ -70,7 +70,7 @@
       "Bash(gh issue:*)"
     ],
     "deny": [
-      "Bash(rm -rf /*:*)",
+      "Bash(rm -rf /*)",
       "Bash(sudo rm:*)",
       "Bash(dd:*)"
     ],

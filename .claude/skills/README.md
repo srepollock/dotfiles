@@ -16,7 +16,6 @@ Claude Code loads skills from `~/.claude/skills/<name>/SKILL.md`. You invoke one
 | [`/mock-server-factory`](./mock-server-factory/SKILL.md) | Generating and managing local mock servers from OpenAPI, GraphQL, or Protobuf specs. | Off by default (`skillOverrides`) |
 | [`/pr`](./pr/SKILL.md) | Writing a pull request description from the current branch diff against `trunk`. | Runs in a fork |
 | [`/rc`](./rc/SKILL.md) | Showing the current Remote Control URL and session info for phone access. | User-invoked only |
-| [`/review`](./review/SKILL.md) | Reviewing recent changes for code quality, security, and test coverage gaps. | Runs in a fork |
 | [`/roadmap-generator`](./roadmap-generator/SKILL.md) | Generating a `ROADMAP.md` from the GitHub project, issues, milestones, and goals. | |
 | [`/sandbox-manager`](./sandbox-manager/SKILL.md) | Running code, reproductions, and baseline tests in ephemeral Docker/Podman environments. | Off by default (`skillOverrides`) |
 | [`/security-review`](./security-review/SKILL.md) | Diff-scoped security review of changed files. | |

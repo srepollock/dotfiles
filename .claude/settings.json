@@ -1,10 +1,11 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 30,
-  "includeCoAuthoredBy": true,
   "env": {
-    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
+    "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1",
+    "EDITOR": "code --wait"
   },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -67,14 +68,34 @@
       "Bash(npx tsc:*)",
       "Bash(yarn run:*)",
       "Bash(pip install:*)",
-      "Bash(gh issue:*)"
+      "Bash(gh issue:*)",
+      "mcp__codegraph__*"
     ],
     "deny": [
       "Bash(rm -rf /*)",
       "Bash(sudo rm:*)",
-      "Bash(dd:*)"
+      "Bash(dd:*)",
+      "Read(**/.env)",
+      "Read(**/.env.local)",
+      "Read(**/.env.*.local)",
+      "Read(~/.ssh/**)",
+      "Read(~/.claude/.credentials.json)",
+      "Read(~/.claude/settings.local.json)",
+      "Edit(**/.env)",
+      "Edit(**/.env.local)",
+      "Edit(**/.env.*.local)"
     ],
     "defaultMode": "auto"
+  },
+  "skillOverrides": {
+    "ast-refactorer": "off",
+    "mock-server-factory": "off",
+    "sandbox-manager": "off",
+    "security-scanner": "off",
+    "telemetry-analyzer": "off",
+    "workspace-indexer": "off",
+    "tribunal": "off",
+    "grill-me": "off"
   },
   "hooks": {
     "PreToolUse": [
@@ -141,6 +162,20 @@
             "type": "command",
             "command": "$HOME/.claude/hooks/dotfiles-drift-notice.sh",
             "timeout": 5
+          },
+          {
+            "type": "command",
+            "command": "echo 'Reminder: use conventional commits. Prefer bun over npm. /compact before stepping away.'"
+          }
+        ]
+      }
+    ],
+    "UserPromptSubmit": [
+      {
+        "hooks": [
+          {
+            "type": "command",
+            "command": "codegraph prompt-hook"
           }
         ]
       }
@@ -157,6 +192,13 @@
     "skill-creator@claude-plugins-official": true,
     "github@claude-plugins-official": true,
     "security-guidance@claude-plugins-official": true,
+    "context7@claude-plugins-official": true,
+    "pr-review-toolkit@claude-plugins-official": true,
+    "document-skills@anthropic-agent-skills": true,
+    "example-skills@anthropic-agent-skills": true,
+    "ui-ux-pro-max@ui-ux-pro-max-skill": true,
+    "ecc@ecc": true,
+    "claude-mem@thedotmack": false,
     "cc-plugin-you-should-know@builtin": true,
     "brand-voice@synced": false,
     "brand-voice~g2@synced": false,
@@ -174,32 +216,48 @@
     "sp-global@synced": false,
     "wealth-management@synced": false
   },
-  "skillOverrides": {
-    "ast-refactorer": "off",
-    "mock-server-factory": "off",
-    "sandbox-manager": "off",
-    "security-scanner": "off",
-    "telemetry-analyzer": "off",
-    "workspace-indexer": "off",
-    "tribunal": "off",
-    "grill-me": "off"
+  "extraKnownMarketplaces": {
+    "anthropic-agent-skills": {
+      "source": {
+        "source": "github",
+        "repo": "anthropics/skills"
+      }
+    },
+    "ui-ux-pro-max-skill": {
+      "source": {
+        "source": "github",
+        "repo": "nextlevelbuilder/ui-ux-pro-max-skill"
+      }
+    },
+    "ecc": {
+      "source": {
+        "source": "git",
+        "url": "https://github.com/affaan-m/ECC.git"
+      }
+    },
+    "thedotmack": {
+      "source": {
+        "source": "github",
+        "repo": "thedotmack/claude-mem"
+      }
+    }
   },
   "spinnerTipsEnabled": true,
   "syntaxHighlightingDisabled": false,
   "alwaysThinkingEnabled": true,
-  "theme": "dark",
-  "autoUpdatesChannel": "latest",
   "modelSettings": {
     "claude-opus-5-5": {
       "effortLevel": "high"
     }
   },
   "advisorModel": "fable",
+  "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
+  "theme": "dark",
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
-  "inputNeededNotifEnabled": false,
+  "inputNeededNotifEnabled": true,
   "agentPushNotifEnabled": true,
   "skipAutoPermissionPrompt": true,
   "autoMode": {

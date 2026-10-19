@@ -96,7 +96,9 @@ claude-config: 3 file(s) drifted (run: claude_sync status)
 history, plugin caches and `settings.local.json` are outside it by construction.
 `skills/synced/` — Claude Code's download of your claude.ai account skills — is
 excluded inside that allowlist: never pushed, never deleted by `pull`, never
-reported as drift.
+reported as drift. The same goes for `skills/firecrawl*`, which `claude_install`
+installs with the `skills` CLI, and `skills/graphify`, which is installed per
+machine.
 
 ### Windows
 

@@ -26,8 +26,10 @@ CLAUDE_PATHS=(CLAUDE.md settings.json agents commands skills hooks)
 # Names skipped at any depth, on both sides: never copied, never deleted, never
 # reported as drift. skills/synced is Claude Code's down-sync of claude.ai
 # account skills — the app owns it, and push must never copy it into this repo.
+# firecrawl* are symlinks owned by the `skills` CLI (claude_install installs
+# them) and graphify is installed per machine. Entries may be shell globs.
 # Keep in sync with EXCLUDES in .claude/hooks/dotfiles-drift-notice.sh
-EXCLUDES=(__pycache__ .DS_Store synced)
+EXCLUDES=(__pycache__ .DS_Store synced firecrawl 'firecrawl-*' graphify)
 
 RSYNC_OPTS=(-a --delete)
 DIFF_OPTS=(-rq)
@@ -101,16 +103,21 @@ mirror_dir_python() {
     python3 - "$1" "$2" "${EXCLUDES[@]}" <<'PY'
 import shutil
 import sys
+from fnmatch import fnmatch
 from pathlib import Path
 
-src, dst, excludes = Path(sys.argv[1]), Path(sys.argv[2]), set(sys.argv[3:])
+src, dst, excludes = Path(sys.argv[1]), Path(sys.argv[2]), sys.argv[3:]
+
+
+def excluded(name: str) -> bool:
+    return any(fnmatch(name, pattern) for pattern in excludes)
 
 
 def mirror(s: Path, d: Path) -> None:
     d.mkdir(parents=True, exist_ok=True)
-    wanted = {c.name for c in s.iterdir() if c.name not in excludes}
+    wanted = {c.name for c in s.iterdir() if not excluded(c.name)}
     for child in d.iterdir():
-        if child.name in excludes or child.name in wanted:
+        if excluded(child.name) or child.name in wanted:
             continue
         if child.is_dir() and not child.is_symlink():
             shutil.rmtree(child)

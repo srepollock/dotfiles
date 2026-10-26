@@ -11,6 +11,7 @@ Claude Code loads skills from `~/.claude/skills/<name>/SKILL.md`. You invoke one
 | [`/ast-refactorer`](./ast-refactorer/SKILL.md) | Safe, automated code transformations using AST manipulation. | Off by default (`skillOverrides`) |
 | [`/changelog-generator`](./changelog-generator/SKILL.md) | Generating or appending to a `CHANGELOG.md` from relevant commits. | |
 | [`/compact-safe`](./compact-safe/SKILL.md) | Compacting the conversation while preserving key session state. | |
+| [`/factory`](./factory/SKILL.md) | Running a feature through the software factory loop: spec, build, four parallel reviews, approval, local merge. Live dashboard in `factory/`. | User-invoked only. Source: `~/documents/projects/software-factory` |
 | [`/grill-me`](./grill-me/SKILL.md) | Being interviewed relentlessly about a plan or design until it is fully stress-tested. | Off by default (`skillOverrides`) |
 | [`/issue`](./issue/SKILL.md) | Creating a formatted GitHub issue with `gh`, applying triage priority labels. | |
 | [`/mock-server-factory`](./mock-server-factory/SKILL.md) | Generating and managing local mock servers from OpenAPI, GraphQL, or Protobuf specs. | Off by default (`skillOverrides`) |

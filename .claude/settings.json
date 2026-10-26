@@ -69,8 +69,7 @@
       "Bash(npx tsc:*)",
       "Bash(yarn run:*)",
       "Bash(pip install:*)",
-      "Bash(gh issue:*)",
-      "mcp__codegraph__*"
+      "Bash(gh issue:*)"
     ],
     "deny": [
       "Bash(rm -rf /*)",
@@ -167,16 +166,6 @@
           {
             "type": "command",
             "command": "echo 'Reminder: use conventional commits. Prefer bun over npm. /compact before stepping away.'"
-          }
-        ]
-      }
-    ],
-    "UserPromptSubmit": [
-      {
-        "hooks": [
-          {
-            "type": "command",
-            "command": "codegraph prompt-hook"
           }
         ]
       }

@@ -158,15 +158,6 @@ chore(deps): update typescript to 5.4
 - Don't create new files when editing an existing one will suffice
 - Don't pad PRs or commits — one logical change per commit
 
-## CodeGraph
-
-In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
-
-- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
-- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
-
-If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is my decision.
-
 ## graphify
 
 - **graphify** (`~/.claude/skills/graphify/SKILL.md`) — any input to knowledge graph. Trigger: `/graphify`. Installed per machine, not synced from dotfiles.
@@ -177,12 +168,10 @@ If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is 
 
 Many installed skills overlap. Pick the default below unless I name a specific skill or slash command — an explicit request always wins. If no default fits, use built-in tools rather than guessing between near-identical skills.
 
-**Code understanding.** Both graph tools are index-gated, so they rarely collide:
+**Code understanding.** graphify is index-gated:
 
-- `.codegraph/` exists → **CodeGraph** (`codegraph_explore`) for symbol and call-path questions.
 - `graphify-out/` exists → **graphify** for questions spanning mixed sources (docs, papers, images, video).
-- Both exist → CodeGraph for code, graphify for cross-document.
-- Neither → plain Read/Grep/Glob. Never index on my behalf; that's my call.
+- Otherwise → plain Read/Grep/Glob. Never index on my behalf; that's my call.
 
 **Web.** Split by whether the target is my app or someone else's:
 

@@ -1,10 +1,10 @@
 {
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 30,
-  "includeCoAuthoredBy": true,
   "env": {
     "CLAUDE_CODE_EXPERIMENTAL_AGENT_TEAMS": "1"
   },
+  "includeCoAuthoredBy": true,
   "permissions": {
     "allow": [
       "Bash(git:*)",
@@ -75,6 +75,16 @@
       "Bash(dd:*)"
     ],
     "defaultMode": "auto"
+  },
+  "skillOverrides": {
+    "ast-refactorer": "off",
+    "mock-server-factory": "off",
+    "sandbox-manager": "off",
+    "security-scanner": "off",
+    "telemetry-analyzer": "off",
+    "workspace-indexer": "off",
+    "tribunal": "off",
+    "grill-me": "off"
   },
   "hooks": {
     "PreToolUse": [
@@ -174,29 +184,19 @@
     "sp-global@synced": false,
     "wealth-management@synced": false
   },
-  "skillOverrides": {
-    "ast-refactorer": "off",
-    "mock-server-factory": "off",
-    "sandbox-manager": "off",
-    "security-scanner": "off",
-    "telemetry-analyzer": "off",
-    "workspace-indexer": "off",
-    "tribunal": "off",
-    "grill-me": "off"
-  },
   "spinnerTipsEnabled": true,
   "syntaxHighlightingDisabled": false,
   "alwaysThinkingEnabled": true,
-  "theme": "dark",
-  "autoUpdatesChannel": "latest",
   "modelSettings": {
     "claude-opus-5-5": {
       "effortLevel": "high"
     }
   },
   "advisorModel": "fable",
+  "autoUpdatesChannel": "latest",
   "tui": "fullscreen",
   "autoDreamEnabled": true,
+  "theme": "dark",
   "switchModelsOnFlag": true,
   "remoteControlAtStartup": true,
   "inputNeededNotifEnabled": false,
@@ -243,5 +243,6 @@
       "**Org-specific CLIs**: None configured",
       "routine actions under the meridian-ii repo (make targets: install, check, lint, fmt, typecheck, test, build, bootstrap, backfill-*, docs, config, guard-dev, guard-release) are routine dev workflow, not org-wide"
     ]
-  }
+  },
+  "model": "opus"
 }

@@ -9,7 +9,7 @@
 
 **Primary languages**: Python 3, TypeScript, Bash, YAML
 **Frontend**: React, Next.js
-**Package manager**: `yarn` is the default for new projects. In an existing repo the committed lockfile decides — detect it (`yarn.lock` / `package-lock.json` / `pnpm-lock.yaml`) and use that manager. Never introduce a second lockfile or migrate managers without asking.
+**Package manager**: `bun` is the default for new projects. In an existing repo the committed lockfile decides — detect it (`bun.lock` / `yarn.lock` / `package-lock.json` / `pnpm-lock.yaml`) and use that manager. Never introduce a second lockfile or migrate managers without asking.
 
 ## Communication Style
 
@@ -79,6 +79,8 @@ A subagent starts with zero context. Every dispatch states the goal, the exact p
 
 **General**
 - Prefer explicit over clever — readable code over terse code
+- Prefer functional patterns; avoid classes unless modeling stateful entities
+- Never swallow errors silently; use Result types where possible
 - No unnecessary comments; only comment non-obvious logic
 - No `console.log` left in committed code; use proper logging
 - Don't add error handling for scenarios that can't happen
@@ -86,6 +88,7 @@ A subagent starts with zero context. Every dispatch states the goal, the exact p
 - Prefer adding tests where appropriate - each new feature should have a test case and previous test cases updated when changes occur.
 
 **TypeScript**
+- TypeScript for all new JS-ecosystem code
 - Strict mode always
 - No `any` unless absolutely unavoidable (and comment why)
 - No default exports — named exports only
@@ -139,6 +142,14 @@ chore(deps): update typescript to 5.4
 
 **Config changes**: prefer canonical config surfaces. Change the documented settings file, `.env`, or existing config schema rather than inventing new override layers, shadow files, or wrapper configs. If the canonical surface genuinely can't express the change, say so instead of routing around it.
 
+## Workflow Principles
+
+- Run the project's tests before committing (`bun test`, `yarn test`, `pytest`, …)
+- Always check `git status` before staging
+- Use Plan Mode before large tasks to outline the approach
+- Maintain `CLAUDE.md` + `ROADMAP.md` in every active project
+- `/compact` before stepping away to preserve session continuity
+
 ## What to Avoid
 
 - Don't suggest switching package managers mid-project
@@ -146,3 +157,49 @@ chore(deps): update typescript to 5.4
 - Don't add backwards-compatibility shims or feature flags unless asked
 - Don't create new files when editing an existing one will suffice
 - Don't pad PRs or commits — one logical change per commit
+
+## CodeGraph
+
+In repositories indexed by CodeGraph (a `.codegraph/` directory exists at the repo root), reach for it BEFORE grep/find or reading files when you need to understand or locate code:
+
+- **MCP tool** (when available): `codegraph_explore` answers most code questions in one call — the relevant symbols' verbatim source plus the call paths between them, including dynamic-dispatch hops grep can't follow. Name a file or symbol in the query to read its current line-numbered source. If it's listed but deferred, load it by name via tool search.
+- **Shell** (always works): `codegraph explore "<symbol names or question>"` prints the same output.
+
+If there is no `.codegraph/` directory, skip CodeGraph entirely — indexing is my decision.
+
+## graphify
+
+- **graphify** (`~/.claude/skills/graphify/SKILL.md`) — any input to knowledge graph. Trigger: `/graphify`. Installed per machine, not synced from dotfiles.
+- When I type `/graphify`, use the installed graphify skill before doing anything else.
+- Otherwise graphify applies only where a `graphify-out/` directory exists.
+
+## Skill routing
+
+Many installed skills overlap. Pick the default below unless I name a specific skill or slash command — an explicit request always wins. If no default fits, use built-in tools rather than guessing between near-identical skills.
+
+**Code understanding.** Both graph tools are index-gated, so they rarely collide:
+
+- `.codegraph/` exists → **CodeGraph** (`codegraph_explore`) for symbol and call-path questions.
+- `graphify-out/` exists → **graphify** for questions spanning mixed sources (docs, papers, images, video).
+- Both exist → CodeGraph for code, graphify for cross-document.
+- Neither → plain Read/Grep/Glob. Never index on my behalf; that's my call.
+
+**Web.** Split by whether the target is my app or someone else's:
+
+- Search, scrape, crawl, or extract from external sites → **firecrawl** skills.
+- Driving or QA-ing my own local web app → `example-skills:webapp-testing`.
+- Never use `mcp__claude-in-chrome__*` tools.
+
+**Planning.** `superpowers:brainstorming` to turn vague intent into a design first, then `superpowers:writing-plans` for the implementation plan.
+
+**Code review.** Built-in `/code-review` for correctness; `/simplify` for over-engineering and cleanup; `pr-review-toolkit:review-pr` before landing a PR. `tribunal` only when I ask for a panel.
+
+**Debugging.** `superpowers:systematic-debugging` for a failing test or bug, and for root-cause work on something larger.
+
+**Tests.** `superpowers:test-driven-development`. Language-specific `ecc:*-test` skills only for that language's toolchain.
+
+**Shipping.** My own `/commit` for commits; `/ship-changes` for issue-plus-PR flow.
+
+**Design and frontend.** `frontend-design:frontend-design` for building UI, `ui-ux-pro-max` for design systems and styling; `dataviz` before any chart; `artifact-design` before publishing an Artifact.
+
+**Documents.** `document-skills` (xlsx/docx/pptx/pdf) to _produce_ Office files; `firecrawl-parse` to _read_ local PDF/DOCX/XLSX.

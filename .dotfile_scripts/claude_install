@@ -82,6 +82,26 @@ if [ -d "$CLAUDE_SRC/hooks" ] && [ "$(ls -A "$CLAUDE_SRC/hooks" 2>/dev/null)" ];
 fi
 
 # ─────────────────────────────────────────────
+# Third-party skills — installed by the `skills` CLI, not copied from here.
+# With only claude-code as the target agent, the CLI copies them straight into
+# ~/.claude/skills; claude_sync excludes them (see EXCLUDES there).
+# ─────────────────────────────────────────────
+
+SKILL_SOURCES=(firecrawl/cli firecrawl/skills firecrawl/firecrawl-workflows)
+
+if command -v npx &>/dev/null; then
+    for src in "${SKILL_SOURCES[@]}"; do
+        if npx -y skills add "$src" -g -a claude-code -s '*' -y >/dev/null; then
+            printf "  ✓ skills: %s\n" "$src"
+        else
+            printf "  ⚠ skills: failed to install %s — rerun: npx skills add %s -g -a claude-code\n" "$src" "$src" >&2
+        fi
+    done
+else
+    printf "  ⚠ npx not found — skipped skills: %s\n" "${SKILL_SOURCES[*]}" >&2
+fi
+
+# ─────────────────────────────────────────────
 # Claude Desktop — platform-specific path
 # ─────────────────────────────────────────────
 

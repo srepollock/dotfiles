@@ -20,7 +20,7 @@ LIVE_CLAUDE="${HOME}/.claude"
 # Keep in sync with CLAUDE_PATHS in .dotfile_scripts/claude_sync
 PATHS=(CLAUDE.md settings.json agents commands skills hooks)
 # Keep in sync with EXCLUDES in .dotfile_scripts/claude_sync
-EXCLUDES=(__pycache__ .DS_Store synced)
+EXCLUDES=(__pycache__ .DS_Store synced firecrawl 'firecrawl-*' graphify)
 
 DIFF_OPTS=(-rq)
 for x in "${EXCLUDES[@]}"; do

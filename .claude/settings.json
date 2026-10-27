@@ -1,5 +1,4 @@
 {
-  "model": "opus",
   "$schema": "https://json.schemastore.org/claude-code-settings.json",
   "cleanupPeriodDays": 30,
   "env": {
@@ -87,6 +86,7 @@
     ],
     "defaultMode": "auto"
   },
+  "model": "opus",
   "skillOverrides": {
     "ast-refactorer": "off",
     "mock-server-factory": "off",
@@ -204,7 +204,8 @@
     "productivity@synced": false,
     "sales@synced": false,
     "sp-global@synced": false,
-    "wealth-management@synced": false
+    "wealth-management@synced": false,
+    "drive-brain@drive-brain": true
   },
   "extraKnownMarketplaces": {
     "anthropic-agent-skills": {
@@ -229,6 +230,12 @@
       "source": {
         "source": "github",
         "repo": "thedotmack/claude-mem"
+      }
+    },
+    "drive-brain": {
+      "source": {
+        "source": "github",
+        "repo": "srepollock/drive-brain"
       }
     }
   },

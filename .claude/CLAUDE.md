@@ -11,6 +11,12 @@
 **Frontend**: React, Next.js
 **Package manager**: `bun` is the default for new projects. In an existing repo the committed lockfile decides — detect it (`bun.lock` / `yarn.lock` / `package-lock.json` / `pnpm-lock.yaml`) and use that manager. Never introduce a second lockfile or migrate managers without asking.
 
+## Windows environment
+
+- `python3` may resolve to the Windows Store stub. Use `python` or `py -3`, and verify with `python3 --version` before relying on it in hooks.
+- Git Bash mangles POSIX-style paths in configs such as MCP JSON. Use Windows paths (`C:/...`) or set `MSYS_NO_PATHCONV=1`.
+- If an auto-mode safety check blocks an edit to Claude's own settings, immediately print the exact command for me to run instead of retrying.
+
 ## Communication Style
 
 - Be concise by default — skip preamble, don't restate what I said, lead with the answer
@@ -133,6 +139,12 @@ chore(deps): update typescript to 5.4
 - PATCH — bug fixes
 
 **Issue & PR workflow**: every non-trivial fix ships as GitHub issue → branch → PR that closes the issue, with milestone, labels, and priority set, plus a reference to any related issue. When a non-trivial fix is finished and verified, propose the issue title/labels/milestone and the PR — then wait for a single confirmation before writing anything to GitHub. Before opening the PR, self-review the diff for silent pass-throughs and unhandled enum or case branches.
+
+## Git & multi-session hygiene
+
+- Before building anything new, run `git fetch && git status` and check `origin/trunk` for existing work. Other Claude sessions often push to trunk at the same time.
+- If trunk moved during a task, stop, show me what changed, and reconcile before continuing.
+- For the dotfiles repo, commit and push directly to trunk. Do not suggest an issue/PR workflow unless I ask for one.
 
 ## Working Practices
 

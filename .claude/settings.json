@@ -187,7 +187,7 @@
     "document-skills@anthropic-agent-skills": true,
     "example-skills@anthropic-agent-skills": true,
     "ui-ux-pro-max@ui-ux-pro-max-skill": true,
-    "ecc@ecc": true,
+    "ecc@ecc": false,
     "claude-mem@thedotmack": false,
     "cc-plugin-you-should-know@builtin": true,
     "brand-voice@synced": false,
@@ -236,6 +236,12 @@
       "source": {
         "source": "github",
         "repo": "srepollock/drive-brain"
+      }
+    },
+    "unity-agent-plugin": {
+      "source": {
+        "source": "github",
+        "repo": "Unity-Technologies/unity-agent-plugin"
       }
     }
   },
@@ -298,5 +304,6 @@
       "**Org-specific CLIs**: None configured",
       "routine actions under the meridian-ii repo (make targets: install, check, lint, fmt, typecheck, test, build, bootstrap, backfill-*, docs, config, guard-dev, guard-release) are routine dev workflow, not org-wide"
     ]
-  }
+  },
+  "autoContinueAtUsageLimit": true
 }
